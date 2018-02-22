@@ -15,10 +15,13 @@ namespace GamePlatform2D
     public class GameScreen
     {
         protected ContentManager content;
+        protected List<List<string>> attributes, contents;
 
         public virtual void LoadContent(ContentManager Content)
         {
             content = new ContentManager(Content.ServiceProvider, "Content");
+            attributes = new List<List<string>>();
+            contents = new List<List<string>>();
         }
 
         public virtual void UnloadContent()

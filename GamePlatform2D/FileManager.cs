@@ -9,8 +9,8 @@ namespace GamePlatform2D
 
         LoadType type;
 
-        List<List<string>> attributes = new List<List<string>>();
-        List<List<string>> contents = new List<List<string>>();
+        List<List<string>> attributes;
+        List<List<string>> contents;
 
         List<string> tempAttributes;
         List<string> tempContents;
@@ -28,7 +28,7 @@ namespace GamePlatform2D
                     if (line.Contains("Load="))
                     {
                         tempAttributes = new List<string>();
-                        line.Remove(0, line.IndexOf("=") + 1);
+                        line = line.Remove(0, line.IndexOf("=") + 1);
                         type = LoadType.Attributes;
                     }
                     else

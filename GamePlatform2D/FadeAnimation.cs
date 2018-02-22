@@ -85,9 +85,15 @@ namespace GamePlatform2D
                         alpha += fadeSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     if (alpha <= 0.0f)
+                    {
                         alpha = 0.0f;
+                        increase = true;
+                    }
                     else if (alpha >= 1.0f)
+                    {
                         alpha = 1.0f;
+                        increase = false;
+                    }
                 }
 
                 if (alpha == activateValue)
@@ -96,7 +102,7 @@ namespace GamePlatform2D
                     timer -= gameTime.ElapsedGameTime;
                     if (timer.TotalSeconds <= 0)
                     {
-                        increase = !increase;
+                       // increase = !increase;
                         timer = defaultTime;
                         stopUpdating = false;
                     }
