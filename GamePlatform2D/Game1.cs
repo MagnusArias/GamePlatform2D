@@ -27,6 +27,11 @@ namespace GamePlatform2D
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            ScreenManager.Instance.Initialize();
+            ScreenManager.Instance.Dimensions = new Vector2(800, 600);
+            graphics.PreferredBackBufferWidth = (int)ScreenManager.Instance.Dimensions.X;
+            graphics.PreferredBackBufferHeight = (int)ScreenManager.Instance.Dimensions.Y;
+            graphics.ApplyChanges();
 
             base.Initialize();
         }
@@ -39,7 +44,7 @@ namespace GamePlatform2D
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            ScreenManager.Instance.LoadContent(Content);
             // TODO: use this.Content to load your game content here
         }
 
@@ -63,7 +68,7 @@ namespace GamePlatform2D
                 Exit();
 
             // TODO: Add your update logic here
-
+            ScreenManager.Instance.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -75,7 +80,10 @@ namespace GamePlatform2D
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            spriteBatch.Begin();
             // TODO: Add your drawing code here
+            ScreenManager.Instance.Draw(spriteBatch);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
