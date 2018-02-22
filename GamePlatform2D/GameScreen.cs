@@ -16,12 +16,14 @@ namespace GamePlatform2D
     {
         protected ContentManager content;
         protected List<List<string>> attributes, contents;
+        protected InputManager inputManager;
 
         public virtual void LoadContent(ContentManager Content)
         {
             content = new ContentManager(Content.ServiceProvider, "Content");
             attributes = new List<List<string>>();
             contents = new List<List<string>>();
+            inputManager = new InputManager();
         }
 
         public virtual void UnloadContent()

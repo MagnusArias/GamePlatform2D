@@ -67,12 +67,12 @@ namespace GamePlatform2D
 
         public override void Update(GameTime gameTime)
         {
-            keyState = Keyboard.GetState();
+            inputManager.Update();
 
             if (fade[imageNumber].Alpha == 0.0f)
                 imageNumber++;
 
-            if (imageNumber >= fade.Count - 1 || keyState.IsKeyDown(Keys.Z))
+            if (imageNumber >= fade.Count - 1 || inputManager.KeyPressed(Keys.Z))
             {
                 if (fade[imageNumber].Alpha != 1.0f)
                     ScreenManager.Instance.AddScreen(new TitleScreen(), fade[imageNumber].Alpha);
