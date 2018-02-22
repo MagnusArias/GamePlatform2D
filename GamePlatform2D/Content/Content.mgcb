@@ -75,3 +75,10 @@
 /processorParam:TextureFormat=Color
 /build:Splash/image1.png
 
+#begin MenuFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:MenuFont.spritefont
+

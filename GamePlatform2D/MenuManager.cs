@@ -49,7 +49,8 @@ namespace GamePlatform2D
         private void SetAnimation()
         {
             Vector2 pos = position;
-            Vector2 dimensions;
+            tempAnimation = new List<Animation>();
+            Vector2 dimensions = Vector2.Zero;
 
             for (int i = 0; i < menuImages.Count; i++)
             {
@@ -63,19 +64,20 @@ namespace GamePlatform2D
                             break;
                     }
                 }
-                animation.Add(tempAnimation);
+
+                if (tempAnimation.Count > 0)
+                    animation.Add(tempAnimation);
                 tempAnimation = new List<Animation>();
-                dimensions = new Vector2(font.MeasureString(menuItems[i]).X + menuImages[i].Width,
-                    font.MeasureString(menuItems[i]).Y + menuImages[i].Height);
+
+                dimensions = new Vector2(
+                    font.MeasureString(menuItems[i]).X,// + menuImages[i].Width,
+                    font.MeasureString(menuItems[i]).Y //+ menuImages[i].Height
+                );
 
                 if (axis == 1)
-                {
                     pos.X += dimensions.X;
-                }
                 else
-                {
                     pos.Y += dimensions.Y;
-                }
             }
         }
 
@@ -86,6 +88,9 @@ namespace GamePlatform2D
             animationTypes = new List<string>();
             menuImages = new List<Texture2D>();
             animation = new List<List<Animation>>();
+            fileManager = new FileManager();
+            attributes = new List<List<string>>();
+            contents = new List<List<string>>();
 
             position = Vector2.Zero;
             itemNumber = 0;
@@ -125,12 +130,15 @@ namespace GamePlatform2D
                         case "Font":
                             font = content.Load<SpriteFont>(contents[i][n]);
                             break;
+
+                        case "Animation":
+                            animationTypes.Add(contents[i][n]);
+                            break;
                     }
                 }
             }
-
-
-
+            SetMenuItems();
+            SetAnimation();
         }
 
         public void UnloadContent()
@@ -146,12 +154,29 @@ namespace GamePlatform2D
 
         public void Update(GameTime gameTime)
         {
+            for (int i = 0; i < animation.Count; i++)
+            {
+                for (int j = 0; j < animation[i].Count; j++)
+                {
+                    if (itemNumber == i)
+                        animation[i][j].IsActive = true;
+                    else
+                        animation[i][j].IsActive = false;
 
+                    animation[i][j].Update(gameTime);
+                }
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-
+            for (int i = 0; i < animation.Count; i++)
+            {
+                for (int j = 0; j < animation[i].Count; j++)
+                {
+                    animation[i][j].Draw(spriteBatch);
+                }
+            }
         }
     }
 }

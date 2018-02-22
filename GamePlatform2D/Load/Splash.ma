@@ -2,5 +2,3 @@
 [Splash/image1]
 [Splash/image2]
 [Splash/image3]
-
-Load=[Sound]
