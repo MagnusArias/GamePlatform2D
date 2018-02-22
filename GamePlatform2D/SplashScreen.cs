@@ -52,8 +52,9 @@ namespace GamePlatform2D
             }
             for (int i = 0; i < fade.Count; i++)
             {
-                fade[i].LoadContent(content, images[i], "", Vector2.Zero);
-                fade[i].Scale = 1.0f;
+                fade[i].LoadContent(content, images[i], "", new Vector2(120, 40));
+                // ImageWIdth / 2 * scale - (ImageWidth/2) = X
+                fade[i].Scale = 2.0f;
                 fade[i].IsActive = true;
             }
         }
@@ -67,9 +68,17 @@ namespace GamePlatform2D
         public override void Update(GameTime gameTime)
         {
             keyState = Keyboard.GetState();
-            // if (keyState.IsKeyDown(Keys.Z))
-            //    ScreenManager.Instance.AddScreen(new TitleScreen());
 
+            if (fade[imageNumber].Alpha == 0.0f)
+                imageNumber++;
+
+            if (imageNumber >= fade.Count - 1 || keyState.IsKeyDown(Keys.Z))
+            {
+                if (fade[imageNumber].Alpha != 1.0f)
+                    ScreenManager.Instance.AddScreen(new TitleScreen(), fade[imageNumber].Alpha);
+                else
+                    ScreenManager.Instance.AddScreen(new TitleScreen());
+            }
             fade[imageNumber].Update(gameTime);
         }
 

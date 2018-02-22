@@ -38,7 +38,7 @@ namespace GamePlatform2D
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(font, "TitleScreen",
-                new Vector2(100, 100), Color.Black);
+                new Vector2(100, 100), Color.White);
         }
     }
 }

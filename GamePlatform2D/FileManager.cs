@@ -40,7 +40,7 @@ namespace GamePlatform2D
                     string[] lineArray = line.Split(']');
                     foreach (string li in lineArray)
                     {
-                        string newLine = line.Trim('[', ' ', ']');
+                        string newLine = li.Trim('[', ' ', ']');
                         if (newLine != string.Empty)
                         {
                             if (type == LoadType.Contents)
@@ -89,14 +89,14 @@ namespace GamePlatform2D
                         }
                         else
                         {
-                            tempContents = new List<string>();
+                            
                             type = LoadType.Contents;
                         }
-
+                        tempContents = new List<string>();
                         string[] lineArray = line.Split(']');
                         foreach (string li in lineArray)
                         {
-                            string newLine = line.Trim('[', ' ', ']');
+                            string newLine = li.Trim('[', ' ', ']');
                             if (newLine != string.Empty)
                             {
                                 if (type == LoadType.Contents)
@@ -117,14 +117,3 @@ namespace GamePlatform2D
         }
     }
 }
-
-
-/*
- * Load=[Image]
- * [splash/image]
- * [splasg/image2]
- * 
- * EndLoad=[Image]
- * 
- *
- */

@@ -24,14 +24,12 @@ namespace GamePlatform2D
         #region Properties
         public override float Alpha
         {
-            get
-            {
-                return alpha;
-            }
+            get { return alpha; }
 
             set
             {
                 alpha = value;
+
                 if (alpha == 1.0f)
                     increase = false;
                 else if (alpha == 0.0f)
@@ -49,6 +47,12 @@ namespace GamePlatform2D
         {
             get { return fadeSpeed; }
             set { fadeSpeed = value; }
+        }
+
+        public bool Increase
+        {
+            get { return increase; }
+            set { increase = value; }
         }
 
         public TimeSpan Timer
