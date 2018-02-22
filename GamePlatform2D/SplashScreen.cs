@@ -13,18 +13,15 @@ namespace GamePlatform2D
 {
     public class SplashScreen : GameScreen
     {
-        KeyboardState keyState;
         SpriteFont font;
-        String text;
         List<FadeAnimation> fade;
         List<Texture2D> images;
         FileManager fileManager;
         int imageNumber;
 
-        public override void LoadContent(ContentManager Content)
+        public override void LoadContent(ContentManager Content, InputManager inputManager)
         {
-            base.LoadContent(Content);
-            text = "MagnusArias\npresents";
+            base.LoadContent(Content, inputManager);
             if (font == null)
                 font = content.Load<SpriteFont>("Font1");
 
@@ -75,9 +72,9 @@ namespace GamePlatform2D
             if (imageNumber >= fade.Count - 1 || inputManager.KeyPressed(Keys.Z))
             {
                 if (fade[imageNumber].Alpha != 1.0f)
-                    ScreenManager.Instance.AddScreen(new TitleScreen(), fade[imageNumber].Alpha);
+                    ScreenManager.Instance.AddScreen(new TitleScreen(), inputManager, fade[imageNumber].Alpha);
                 else
-                    ScreenManager.Instance.AddScreen(new TitleScreen());
+                    ScreenManager.Instance.AddScreen(new TitleScreen(), inputManager);
             }
             fade[imageNumber].Update(gameTime);
         }

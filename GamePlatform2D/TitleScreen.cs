@@ -16,9 +16,9 @@ namespace GamePlatform2D
         KeyboardState keyState;
         SpriteFont font;
 
-        public override void LoadContent(ContentManager Content)
+        public override void LoadContent(ContentManager Content, InputManager inputManager)
         {
-            base.LoadContent(Content);
+            base.LoadContent(Content, inputManager);
             if (font == null)
                 font = content.Load<SpriteFont>("Font1");
         }
@@ -30,9 +30,9 @@ namespace GamePlatform2D
 
         public override void Update(GameTime gameTime)
         {
-            keyState = Keyboard.GetState();
-            if (keyState.IsKeyDown(Keys.Enter))
-                ScreenManager.Instance.AddScreen(new SplashScreen());
+            inputManager.Update();
+            if (inputManager.KeyPressed(Keys.Z))
+                ScreenManager.Instance.AddScreen(new SplashScreen(), inputManager);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

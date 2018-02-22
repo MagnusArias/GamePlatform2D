@@ -15,7 +15,6 @@ namespace GamePlatform2D
         bool increase;
         float fadeSpeed;
         TimeSpan defaultTime, timer;
-        bool startTimer;
         float activateValue;
         bool stopUpdating;
         float defaultAlpha;

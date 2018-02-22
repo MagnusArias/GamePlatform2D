@@ -45,6 +45,7 @@ namespace GamePlatform2D
 
         FadeAnimation fade;
         Texture2D fadeTexture;
+        InputManager inputManager;
         #endregion
 
         #region Properties
@@ -68,21 +69,23 @@ namespace GamePlatform2D
 
         #region Main Methods
 
-        public void AddScreen(GameScreen screen)
+        public void AddScreen(GameScreen screen, InputManager inputManager)
         {
             transition = true;
             newScreen = screen;
             fade.IsActive = true;
             fade.Alpha = 0.0f;
             fade.ActivateValue = 1.0f;
+            this.inputManager = inputManager;
         }
 
-        public void AddScreen(GameScreen screen, float alpha)
+        public void AddScreen(GameScreen screen, InputManager inputManager, float alpha)
         {
             transition = true;
             newScreen = screen;
             fade.IsActive = true;
             fade.ActivateValue = 1.0f;
+            this.inputManager = inputManager;
 
             if (alpha != 1.0f)
                 fade.Alpha = 1.0f - alpha;
@@ -95,12 +98,13 @@ namespace GamePlatform2D
         {
             currentScreen = new SplashScreen();
             fade = new FadeAnimation();
+            inputManager = new InputManager();
         }
 
         public void LoadContent(ContentManager Content)
         {
             content = new ContentManager(Content.ServiceProvider, "Content");
-            currentScreen.LoadContent(content);
+            currentScreen.LoadContent(content, inputManager);
             fadeTexture = content.Load<Texture2D>("sprite");
             fade.LoadContent(content, fadeTexture, "", Vector2.Zero);
             fade.Scale = dimensions.X;
@@ -135,7 +139,7 @@ namespace GamePlatform2D
                     screenStack.Push(newScreen);
                     currentScreen.UnloadContent();
                     currentScreen = newScreen;
-                    currentScreen.LoadContent(content);
+                    currentScreen.LoadContent(content, this.inputManager);
                 }
                 else if (fade.Alpha == 0.0f)
                 {
