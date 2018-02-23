@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\null.png" />
     <Content Include="Content\Splash\image1.png" />
     <Content Include="Content\Splash\image2.png" />
     <Content Include="Content\Splash\image3.png" />

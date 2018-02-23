@@ -34,7 +34,7 @@ namespace GamePlatform2D
         public override void Update(GameTime gameTime)
         {
             inputManager.Update();
-            menu.Update(gameTime);
+            menu.Update(gameTime, inputManager);
             if (inputManager.KeyPressed(Keys.Z))
                 ScreenManager.Instance.AddScreen(new SplashScreen(), inputManager);
         }

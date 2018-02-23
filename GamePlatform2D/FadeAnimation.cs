@@ -105,7 +105,6 @@ namespace GamePlatform2D
                     timer -= gameTime.ElapsedGameTime;
                     if (timer.TotalSeconds <= 0)
                     {
-                       // increase = !increase;
                         timer = defaultTime;
                         stopUpdating = false;
                     }
@@ -114,6 +113,7 @@ namespace GamePlatform2D
             else
             {
                 alpha = defaultAlpha;
+                stopUpdating = false;
             }
         }
         #endregion

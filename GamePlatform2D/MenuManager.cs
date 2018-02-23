@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace GamePlatform2D
 {
@@ -28,6 +29,7 @@ namespace GamePlatform2D
         List<List<string>> attributes, contents;
         List<Animation> tempAnimation;
         SpriteFont font;
+        string align;
 
         #endregion
 
@@ -36,7 +38,7 @@ namespace GamePlatform2D
             for (int i = 0; i < menuItems.Count; i++)
             {
                 if (menuImages.Count == i)
-                    menuImages.Add(null);
+                    menuImages.Add(ScreenManager.Instance.NullImage);
             }
 
             for (int i = 0; i < menuImages.Count; i++)
@@ -48,12 +50,42 @@ namespace GamePlatform2D
 
         private void SetAnimation()
         {
-            Vector2 pos = position;
-            tempAnimation = new List<Animation>();
             Vector2 dimensions = Vector2.Zero;
+            Vector2 pos = Vector2.Zero;
 
+            if (align.Contains("Center"))
+            {
+                for (int i = 0; i < menuItems.Count; i++)
+                {
+                    dimensions.X += font.MeasureString(menuItems[i]).X + menuImages[i].Width;
+                    dimensions.Y += font.MeasureString(menuItems[i]).Y + menuImages[i].Height;
+                }
+                if (axis == 1)
+                {
+                    pos.X = (ScreenManager.Instance.Dimensions.X - dimensions.X) / 2;
+                }
+                else if (axis == 2)
+                {
+                    pos.Y = (ScreenManager.Instance.Dimensions.Y - dimensions.Y) / 2;
+                }
+            }
+            else
+            {
+                pos = position;
+            }
+
+            tempAnimation = new List<Animation>();
             for (int i = 0; i < menuImages.Count; i++)
             {
+                dimensions = new Vector2(
+                    font.MeasureString(menuItems[i]).X + menuImages[i].Width,
+                    font.MeasureString(menuItems[i]).Y + menuImages[i].Height);
+
+                if (axis == 1)
+                    pos.Y = (ScreenManager.Instance.Dimensions.Y - dimensions.Y) / 2;
+                else
+                    pos.X = (ScreenManager.Instance.Dimensions.X - dimensions.X) / 2;
+
                 for (int j = 0; j < animationTypes.Count; j++)
                 {
                     switch (animationTypes[j])
@@ -61,6 +93,7 @@ namespace GamePlatform2D
                         case "Fade":
                             tempAnimation.Add(new FadeAnimation());
                             tempAnimation[tempAnimation.Count - 1].LoadContent(content, menuImages[i], menuItems[i], pos);
+                            tempAnimation[tempAnimation.Count - 1].Font = font;
                             break;
                     }
                 }
@@ -69,10 +102,6 @@ namespace GamePlatform2D
                     animation.Add(tempAnimation);
                 tempAnimation = new List<Animation>();
 
-                dimensions = new Vector2(
-                    font.MeasureString(menuItems[i]).X,// + menuImages[i].Width,
-                    font.MeasureString(menuItems[i]).Y //+ menuImages[i].Height
-                );
 
                 if (axis == 1)
                     pos.X += dimensions.X;
@@ -134,6 +163,10 @@ namespace GamePlatform2D
                         case "Animation":
                             animationTypes.Add(contents[i][n]);
                             break;
+
+                        case "Align":
+                            align = contents[i][n];
+                            break;
                     }
                 }
             }
@@ -152,8 +185,35 @@ namespace GamePlatform2D
             animationTypes.Clear();
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, InputManager inputManager)
         {
+            if (axis == 1)
+            {
+                if (inputManager.KeyPressed(Keys.Right, Keys.D))
+                {
+                    itemNumber++;
+                }
+                else if (inputManager.KeyPressed(Keys.Left, Keys.A))
+                {
+                    itemNumber--;
+                }
+            }
+            else
+            {
+                if (inputManager.KeyPressed(Keys.Down, Keys.S))
+                {
+                    itemNumber++;
+                }
+                else if (inputManager.KeyPressed(Keys.Up, Keys.W))
+                {
+                    itemNumber--;
+                }
+            }
+
+            if (itemNumber < 0) itemNumber = 0;
+            else if (itemNumber > menuItems.Count - 1) itemNumber = menuItems.Count - 1;
+
+
             for (int i = 0; i < animation.Count; i++)
             {
                 for (int j = 0; j < animation[i].Count; j++)

@@ -45,6 +45,7 @@ namespace GamePlatform2D
 
         FadeAnimation fade;
         Texture2D fadeTexture;
+        Texture2D nullImage;
         InputManager inputManager;
         #endregion
 
@@ -65,6 +66,11 @@ namespace GamePlatform2D
             set { dimensions = value; }
         }
 
+        public Texture2D NullImage
+        {
+            get { return nullImage; }
+
+        }
         #endregion
 
         #region Main Methods
@@ -108,6 +114,9 @@ namespace GamePlatform2D
             fadeTexture = content.Load<Texture2D>("sprite");
             fade.LoadContent(content, fadeTexture, "", Vector2.Zero);
             fade.Scale = dimensions.X;
+
+            nullImage = content.Load<Texture2D>("null");
+
         }
 
         public void Update(GameTime gameTime)

@@ -1,7 +1,7 @@
 ﻿Load=[Title]
 
-Load=[Axis][Position][Font][Animation]
-[2][200 200][MenuFont][Fade]
+Load=[Axis][Font][Animation][Align]
+[2][MenuFont][Fade][Center]
 
 Load=[Item]
 [New Game]

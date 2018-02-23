@@ -43,6 +43,12 @@ namespace GamePlatform2D
             get { return scale; }
             set { scale = value; }
         }
+
+        public virtual SpriteFont Font
+        {
+            get { return font; }
+            set { font = value; }
+        }
         #endregion
 
         #region Methods
