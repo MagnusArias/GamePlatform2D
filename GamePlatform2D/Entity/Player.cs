@@ -60,26 +60,36 @@ namespace GamePlatform2D
             moveAnimation.UnloadContent();
         }
 
-        public override void Update(GameTime gameTime, InputManager input)
+        public override void Update(GameTime gameTime, InputManager input, Collision col, Layers layer)
         {
             moveAnimation.IsActive = true;
-            if (input.KeyDown(Keys.Right, Keys.D))
+            if (input.KeyDown(Keys.Right, Keys.D)) moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 2);
+            else if (input.KeyDown(Keys.Left, Keys.A)) moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 1);
+            else moveAnimation.IsActive = false;
+
+
+            for (int i = 0; i < col.CollisionMap.Count; i++)
             {
-                
-                moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 2);
-                text = "right";
+                for (int j = 0; j < col.CollisionMap[i].Count; j++)
+                {
+                    if (position.X + moveAnimation.FrameWidth < j * layer.TileDimensions.X ||
+                            position.X > j * layer.TileDimensions.X + layer.TileDimensions.X ||
+                            position.Y + moveAnimation.FrameHeight < i * layer.TileDimensions.Y ||
+                            position.Y > i * layer.TileDimensions.Y + layer.TileDimensions.Y)
+                    {
+                        // no collision
+                    }
+                    else
+                    {
+
+                    }
+                }
             }
-            else if (input.KeyDown(Keys.Left, Keys.A))
-            {
-                moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 1);
-                text = "left";
-            }
-            else
-            {
-                moveAnimation.IsActive = false;
-                text = "";
-            }
+
+
+
             moveAnimation.Update(gameTime);
+
 
         }
 

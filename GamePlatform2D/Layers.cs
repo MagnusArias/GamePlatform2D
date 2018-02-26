@@ -29,6 +29,13 @@ namespace GamePlatform2D
             set { layerNumber = value; }
             get { return layerNumber; }
         }
+
+        public Vector2 TileDimensions
+        {
+            get { return tileDimensions; }
+            set { tileDimensions = value; }
+        }
+
         public void LoadContent(ContentManager content, string mapID)
         {
             this.content = new ContentManager(content.ServiceProvider, "Content");
@@ -54,7 +61,7 @@ namespace GamePlatform2D
 
                         case "TileDimensions":
                             string[] dim = contents[i][j].Split(',');
-                            tileDimensions = new Vector2(int.Parse(dim[0]), int.Parse(dim[1]));
+                            TileDimensions = new Vector2(int.Parse(dim[0]), int.Parse(dim[1]));
                             break;
 
                         case "StartLayer":
@@ -86,13 +93,13 @@ namespace GamePlatform2D
             {
                 for (int j = 0; j < tileMap[layerNumber][i].Count; j++)
                 {
-                    spriteBatch.Draw(tileSet, 
-                        new Vector2(j * tileDimensions.X, i * tileDimensions.Y),
+                    spriteBatch.Draw(tileSet,
+                        new Vector2(j * TileDimensions.X, i * TileDimensions.Y),
                         new Rectangle(
-                            (int)tileMap[layerNumber][i][j].X * (int)tileDimensions.X,
-                            (int)tileMap[layerNumber][i][j].Y * (int)tileDimensions.Y,
-                            (int)tileDimensions.X,
-                            (int)tileDimensions.Y), 
+                            (int)tileMap[layerNumber][i][j].X * (int)TileDimensions.X,
+                            (int)tileMap[layerNumber][i][j].Y * (int)TileDimensions.Y,
+                            (int)TileDimensions.X,
+                            (int)TileDimensions.Y),
                         Color.White);
                 }
             }
