@@ -81,10 +81,10 @@ namespace GamePlatform2D
         {
             content = new ContentManager(Content.ServiceProvider, "Content");
             currentScreen.LoadContent(content, inputManager);
-            fadeTexture = content.Load<Texture2D>("sprite");
+            fadeTexture = this.content.Load<Texture2D>("sprite");
             fade.LoadContent(content, fadeTexture, "", Vector2.Zero);
             fade.Scale = dimensions.X;
-            nullImage = content.Load<Texture2D>("null");
+            nullImage = this.content.Load<Texture2D>("null");
         }
 
         public void Update(GameTime gameTime)

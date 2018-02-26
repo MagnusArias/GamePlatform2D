@@ -62,7 +62,7 @@ namespace GamePlatform2D
 
             if (text != String.Empty)
             {
-                font = content.Load<SpriteFont>("AnimationFont");
+                font = this.content.Load<SpriteFont>("AnimationFont");
                 color = new Color(114, 77, 233);
             }
 

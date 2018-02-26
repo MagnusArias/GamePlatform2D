@@ -45,8 +45,10 @@
     <Compile Include="Entity\Enemy.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Animation\FadeAnimation.cs" />
+    <Compile Include="Layers.cs" />
     <Compile Include="Managers\FileManager.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Map.cs" />
     <Compile Include="Screens\GameplayScreen.cs" />
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Managers\MenuManager.cs" />
@@ -73,11 +75,15 @@
     <Content Include="Content\Splash\image2.png" />
     <Content Include="Content\Splash\image3.png" />
     <Content Include="Content\sprite.png" />
+    <Content Include="Content\TileSets\tileSet1.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
+    <None Include="Load\Maps\Map1.mma">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Load\Menus.ma">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

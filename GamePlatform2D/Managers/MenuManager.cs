@@ -63,7 +63,7 @@ namespace GamePlatform2D
                             break;
 
                         case "Image":
-                            menuImages.Add(content.Load<Texture2D>(contents[i][n]));
+                            menuImages.Add(this.content.Load<Texture2D>(contents[i][n]));
                             break;
 
                         case "Axis":
@@ -84,7 +84,7 @@ namespace GamePlatform2D
                             break;
 
                         case "Font":
-                            font = content.Load<SpriteFont>(contents[i][n]);
+                            font = this.content.Load<SpriteFont>(contents[i][n]);
                             break;
 
                         case "Animation":

@@ -21,7 +21,7 @@ namespace GamePlatform2D
 
             text = "";
             if (font == null)
-                font = content.Load<SpriteFont>("Font1");
+                font = this.content.Load<SpriteFont>("Font1");
 
             fileManager.LoadContent("Load/Player.ma", attributes, contents);
             for (int i = 0; i < attributes.Count; i++)
@@ -40,7 +40,7 @@ namespace GamePlatform2D
                             break;
 
                         case "Image":
-                            image = content.Load<Texture2D>(contents[i][j]);
+                            image = this.content.Load<Texture2D>(contents[i][j]);
                             break;
 
                         case "Position":

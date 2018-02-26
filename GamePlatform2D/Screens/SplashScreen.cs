@@ -26,7 +26,7 @@ namespace GamePlatform2D
         {
             base.LoadContent(Content, inputManager);
             if (font == null)
-                font = content.Load<SpriteFont>("Font1");
+                font = this.content.Load<SpriteFont>("Font1");
 
             imageNumber = 0;
             fileManager = new FileManager();
@@ -41,7 +41,7 @@ namespace GamePlatform2D
                     switch (attributes[i][n])
                     {
                         case "Image":
-                            images.Add(content.Load<Texture2D>(contents[i][n]));
+                            images.Add(this.content.Load<Texture2D>(contents[i][n]));
                             fade.Add(new FadeAnimation());
                             break;
 

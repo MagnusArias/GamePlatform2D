@@ -28,7 +28,7 @@ namespace GamePlatform2D
         {
             // TODO: Add your initialization logic here
             ScreenManager.Instance.Initialize();
-            ScreenManager.Instance.Dimensions = new Vector2(800, 600);
+            ScreenManager.Instance.Dimensions = new Vector2(640, 480);
             graphics.PreferredBackBufferWidth = (int)ScreenManager.Instance.Dimensions.X;
             graphics.PreferredBackBufferHeight = (int)ScreenManager.Instance.Dimensions.Y;
             graphics.ApplyChanges();

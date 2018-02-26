@@ -20,7 +20,7 @@ namespace GamePlatform2D
         {
             base.LoadContent(Content, inputManager);
             if (font == null)
-                font = content.Load<SpriteFont>("Font1");
+                font = this.content.Load<SpriteFont>("Font1");
             menu = new MenuManager();
             menu.LoadContent(content, "Title");
         }

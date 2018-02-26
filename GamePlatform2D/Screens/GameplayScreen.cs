@@ -10,6 +10,7 @@ namespace GamePlatform2D
     {
         #region Variables
         Player player;
+        Layers layer;
         #endregion
 
         #region Properties
@@ -21,7 +22,10 @@ namespace GamePlatform2D
         {
             base.LoadContent(content, input);
             player = new Player();
+            layer = new Layers();
+
             player.LoadContent(content, input);
+            layer.LoadContent(content, "Map1");
         }
 
         public override void UnloadContent()
@@ -39,6 +43,7 @@ namespace GamePlatform2D
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+            layer.Draw(spriteBatch);
             player.Draw(spriteBatch);
         }
         #endregion
