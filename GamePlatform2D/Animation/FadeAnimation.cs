@@ -24,15 +24,11 @@ namespace GamePlatform2D
         public override float Alpha
         {
             get { return alpha; }
-
             set
             {
                 alpha = value;
-
-                if (alpha == 1.0f)
-                    increase = false;
-                else if (alpha == 0.0f)
-                    increase = true;
+                if (alpha == 1.0f) increase = false;
+                else if (alpha == 0.0f) increase = true;
             }
         }
 

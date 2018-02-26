@@ -5,6 +5,7 @@ namespace GamePlatform2D
 {
     public class FileManager
     {
+        #region Variables
         enum LoadType { Attributes, Contents };
 
         LoadType type;
@@ -14,6 +15,13 @@ namespace GamePlatform2D
 
         bool identifierFound = false;
 
+        #endregion
+
+        #region Properties
+
+        #endregion
+
+        #region Public Methods
         public void LoadContent(string filename, List<List<string>> attributes, List<List<string>> contents)
         {
             using (StreamReader reader = new StreamReader(filename))
@@ -108,5 +116,10 @@ namespace GamePlatform2D
                 }
             }
         }
+        #endregion
+
+        #region Private Methods
+
+        #endregion
     }
 }

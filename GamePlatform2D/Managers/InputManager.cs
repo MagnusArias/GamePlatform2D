@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
 
 namespace GamePlatform2D
 {
     public class InputManager
     {
+        #region Variables
         KeyboardState prevKeyState, keyState;
+        #endregion
 
+        #region Properties
         public KeyboardState PrevKeyState
         {
             get { return prevKeyState; }
@@ -22,7 +20,9 @@ namespace GamePlatform2D
             get { return keyState; }
             set { keyState = value; }
         }
+        #endregion
 
+        #region Public Methods
         public void Update()
         {
             prevKeyState = keyState;
@@ -78,5 +78,10 @@ namespace GamePlatform2D
             }
             return false;
         }
+        #endregion
+
+        #region PrivateMethods
+
+        #endregion
     }
 }

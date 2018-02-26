@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,37 +7,14 @@ namespace GamePlatform2D
 {
     public class ScreenManager
     {
-
         #region Variables
-        /// <summary>
-        /// Custom content manager
-        /// </summary>
         ContentManager content;
-
         GameScreen currentScreen;
         GameScreen newScreen;
-
-        /// <summary>
-        /// ScreenManager Instance
-        /// </summary>
         private static ScreenManager instance;
-
-        /// <summary>
-        ///  Storing the GameScreens
-        /// </summary>
-       // Dictionary<string, GameScreen> screens = new Dictionary<string, GameScreen>();
-
-        /// <summary>
-        /// Screen stack - kolejność
-        /// </summary>
         Stack<GameScreen> screenStack = new Stack<GameScreen>();
-
-        /// <summary>
-        /// Screen width and height
-        /// </summary>
         Vector2 dimensions;
         bool transition;
-
         FadeAnimation fade;
         Texture2D fadeTexture;
         Texture2D nullImage;
@@ -54,8 +26,7 @@ namespace GamePlatform2D
         {
             get
             {
-                if (instance == null)
-                    instance = new ScreenManager();
+                if (instance == null) instance = new ScreenManager();
                 return instance;
             }
         }
@@ -73,8 +44,7 @@ namespace GamePlatform2D
         }
         #endregion
 
-        #region Main Methods
-
+        #region Public Methods
         public void AddScreen(GameScreen screen, InputManager inputManager)
         {
             transition = true;
@@ -102,7 +72,7 @@ namespace GamePlatform2D
 
         public void Initialize()
         {
-            currentScreen = new SplashScreen();
+            currentScreen = new GameplayScreen();
             fade = new FadeAnimation();
             inputManager = new InputManager();
         }
@@ -114,30 +84,23 @@ namespace GamePlatform2D
             fadeTexture = content.Load<Texture2D>("sprite");
             fade.LoadContent(content, fadeTexture, "", Vector2.Zero);
             fade.Scale = dimensions.X;
-
             nullImage = content.Load<Texture2D>("null");
-
         }
 
         public void Update(GameTime gameTime)
         {
-            if (!transition)
-                currentScreen.Update(gameTime);
-            else
-                Transition(gameTime);
+            if (!transition) currentScreen.Update(gameTime);
+            else Transition(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             currentScreen.Draw(spriteBatch);
-            if (transition)
-                fade.Draw(spriteBatch);
+            if (transition) fade.Draw(spriteBatch);
         }
-
         #endregion
 
-
-        #region PrivateMethods
+        #region Private Methods
         private void Transition(GameTime gameTime)
         {
             if (transition)
@@ -158,6 +121,5 @@ namespace GamePlatform2D
             }
         }
         #endregion
-
     }
 }

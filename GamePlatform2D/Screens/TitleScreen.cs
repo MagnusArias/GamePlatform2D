@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace GamePlatform2D
 {
     public class TitleScreen : GameScreen
     {
+        #region Variables
         SpriteFont font;
         MenuManager menu;
+        #endregion
 
+        #region Properties
+
+        #endregion
+
+        #region Public Methods
         public override void LoadContent(ContentManager Content, InputManager inputManager)
         {
             base.LoadContent(Content, inputManager);
@@ -35,13 +35,16 @@ namespace GamePlatform2D
         {
             inputManager.Update();
             menu.Update(gameTime, inputManager);
-            if (inputManager.KeyPressed(Keys.Z))
-                ScreenManager.Instance.AddScreen(new SplashScreen(), inputManager);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             menu.Draw(spriteBatch);
         }
+        #endregion
+
+        #region Private Methods
+
+        #endregion
     }
 }

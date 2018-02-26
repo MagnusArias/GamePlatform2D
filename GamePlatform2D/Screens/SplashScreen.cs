@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,11 +8,19 @@ namespace GamePlatform2D
 {
     public class SplashScreen : GameScreen
     {
+        #region Variables
         SpriteFont font;
         List<FadeAnimation> fade;
         List<Texture2D> images;
         FileManager fileManager;
         int imageNumber;
+        #endregion
+
+        #region Properties
+
+        #endregion
+
+        #region Public Methods
 
         public override void LoadContent(ContentManager Content, InputManager inputManager)
         {
@@ -82,11 +85,11 @@ namespace GamePlatform2D
         public override void Draw(SpriteBatch spriteBatch)
         {
             fade[imageNumber].Draw(spriteBatch);
-            /*
-            spriteBatch.DrawString(font, text,
-                new Vector2(ScreenManager.Instance.Dimensions.X / 2 - font.MeasureString(text).X / 2,
-                ScreenManager.Instance.Dimensions.Y / 2 - font.MeasureString(text).Y / 2), Color.Black);
-                */
         }
+        #endregion
+
+        #region Private Methods
+
+        #endregion
     }
 }

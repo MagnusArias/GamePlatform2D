@@ -28,7 +28,7 @@ namespace GamePlatform2D
         #region Properties
         public bool IsActive
         {
-            set { isActive = value;}
+            set { isActive = value; }
             get { return isActive; }
         }
 
@@ -85,16 +85,13 @@ namespace GamePlatform2D
             image = null;
         }
 
-        public virtual void Update(GameTime gameTime)
-        {
-
-        }
+        public virtual void Update(GameTime gameTime) { }
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             if (image != null)
             {
-                origin = new Vector2(sourceRect.Width/2, sourceRect.Height/2);
+                origin = new Vector2(sourceRect.Width / 2, sourceRect.Height / 2);
                 spriteBatch.Draw(image, position + origin, sourceRect, Color.White * alpha, rotation, origin, scale, SpriteEffects.None, 0.0f);
             }
 
@@ -103,7 +100,6 @@ namespace GamePlatform2D
                 origin = new Vector2(font.MeasureString(text).X / 2, font.MeasureString(text).Y / 2);
                 spriteBatch.DrawString(font, text, position + origin, color * alpha, rotation, origin, scale, SpriteEffects.None, 0.0f);
             }
-            
         }
         #endregion
     }
