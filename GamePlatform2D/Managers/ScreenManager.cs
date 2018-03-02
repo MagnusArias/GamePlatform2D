@@ -7,17 +7,20 @@ namespace GamePlatform2D
 {
     public class ScreenManager
     {
+        private static ScreenManager instance;
+
         #region Variables
         ContentManager content;
         GameScreen currentScreen;
         GameScreen newScreen;
-        private static ScreenManager instance;
+      
         Stack<GameScreen> screenStack = new Stack<GameScreen>();
         Vector2 dimensions;
         bool transition;
-        FadeAnimation fade;
-        Texture2D fadeTexture;
-        Texture2D nullImage;
+        Animation animation = new Animation();
+        FadeAnimation fade = new FadeAnimation();
+        
+        Texture2D fadeTexture, nullImage;
         InputManager inputManager;
         #endregion
 
@@ -56,6 +59,7 @@ namespace GamePlatform2D
             newScreen = screen;
             fade.IsActive = true;
             fade.Alpha = 0.0f;
+            fade.Increase = true;
             fade.ActivateValue = 1.0f;
             this.inputManager = inputManager;
         }
@@ -77,7 +81,7 @@ namespace GamePlatform2D
 
         public void Initialize()
         {
-            currentScreen = new GameplayScreen();
+            currentScreen = new SplashScreen();
             fade = new FadeAnimation();
             inputManager = new InputManager();
         }
@@ -87,8 +91,8 @@ namespace GamePlatform2D
             content = new ContentManager(Content.ServiceProvider, "Content");
             currentScreen.LoadContent(content, inputManager);
             fadeTexture = this.content.Load<Texture2D>("sprite");
-            fade.LoadContent(content, fadeTexture, "", Vector2.Zero);
-            fade.Scale = dimensions.X;
+            animation.LoadContent(content, fadeTexture, "", Vector2.Zero);
+            animation.Scale = dimensions.X;
             nullImage = this.content.Load<Texture2D>("null");
         }
 
@@ -101,7 +105,7 @@ namespace GamePlatform2D
         public void Draw(SpriteBatch spriteBatch)
         {
             currentScreen.Draw(spriteBatch);
-            if (transition) fade.Draw(spriteBatch);
+            if (transition) animation.Draw(spriteBatch);
         }
         #endregion
 
@@ -110,7 +114,7 @@ namespace GamePlatform2D
         {
             if (transition)
             {
-                fade.Update(gameTime);
+                fade.Update(gameTime, ref animation);
                 if (fade.Alpha == 1.0f && fade.Timer.TotalSeconds == 1.0f)
                 {
                     screenStack.Push(newScreen);

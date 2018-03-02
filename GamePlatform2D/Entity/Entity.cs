@@ -10,12 +10,14 @@ namespace GamePlatform2D
     {
         #region Variables
         protected int health;
-        protected SpriteSheetAnimation moveAnimation;
-        protected float moveSpeed;
+        protected Animation moveAnimation;
+        protected SpriteSheetAnimation ssAnimation;
+        protected float moveSpeed, gravity;
         protected ContentManager content;
         protected FileManager fileManager;
         protected Texture2D image;
-        protected Vector2 position;
+        protected Vector2 position, velocity, prevPosition;
+        protected bool activateGravity, syncTilePosition;
 
         protected List<List<string>> attributes, contents;
         #endregion
@@ -37,7 +39,7 @@ namespace GamePlatform2D
             content.Unload();
         }
 
-        public virtual void Update(GameTime gameTime, InputManager input, Collision col, Layers layer)
+        public virtual void Update(GameTime gameTime, InputManager input, Collision col, Layer layer)
         {
 
         }

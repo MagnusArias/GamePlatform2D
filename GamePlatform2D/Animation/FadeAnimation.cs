@@ -21,17 +21,6 @@ namespace GamePlatform2D
         #endregion
 
         #region Properties
-        public override float Alpha
-        {
-            get { return alpha; }
-            set
-            {
-                alpha = value;
-                if (alpha == 1.0f) increase = false;
-                else if (alpha == 0.0f) increase = true;
-            }
-        }
-
         public float ActivateValue
         {
             get { return activateValue; }
@@ -55,47 +44,50 @@ namespace GamePlatform2D
             get { return timer; }
             set { defaultTime = value; timer = defaultTime; }
         }
-        #endregion
 
-        #region Methods
-        public override void LoadContent(ContentManager Content, Texture2D image, string text, Vector2 position)
+        public float DefaultAlpha
         {
-            base.LoadContent(Content, image, text, position);
-
+            set { defaultAlpha = value; }
+        }
+        #endregion
+        
+        public FadeAnimation()
+        {
             increase = false;
             fadeSpeed = 1.0f;
             defaultTime = new TimeSpan(0, 0, 1);
             timer = defaultTime;
             activateValue = 0.0f;
             stopUpdating = false;
-            defaultAlpha = alpha;
+            defaultAlpha = 1.0f;
         }
 
-        public override void Update(GameTime gameTime)
+        #region Public Methods
+        public override void Update(GameTime gameTime, ref Animation a)
         {
-            if (isActive)
+            if (a.IsActive)
             {
                 if (!stopUpdating)
                 {
 
                     if (!increase)
-                        alpha -= fadeSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        a.Alpha -= fadeSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     else
-                        alpha += fadeSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                        a.Alpha += fadeSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                    if (alpha <= 0.0f)
+                    if (a.Alpha <= 0.0f)
                     {
-                        alpha = 0.0f;
+                        a.Alpha = 0.0f;
                         increase = true;
                     }
-                    else if (alpha >= 1.0f)
+                    else if (a.Alpha >= 1.0f)
                     {
-                        alpha = 1.0f;
+                        a.Alpha = 1.0f;
                         increase = false;
                     }
                 }
 
-                if (alpha == activateValue)
+                if (a.Alpha == activateValue)
                 {
                     stopUpdating = true;
                     timer -= gameTime.ElapsedGameTime;
@@ -108,7 +100,7 @@ namespace GamePlatform2D
             }
             else
             {
-                alpha = defaultAlpha;
+                a.Alpha = defaultAlpha;
                 stopUpdating = false;
             }
         }

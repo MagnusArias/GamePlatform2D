@@ -10,10 +10,11 @@ namespace GamePlatform2D
     {
         #region Variables
         SpriteFont font;
-        List<FadeAnimation> fade;
+        List<Animation> animation;
         List<Texture2D> images;
         FileManager fileManager;
         int imageNumber;
+        FadeAnimation fadeAnimation;
         #endregion
 
         #region Properties
@@ -30,8 +31,9 @@ namespace GamePlatform2D
 
             imageNumber = 0;
             fileManager = new FileManager();
-            fade = new List<FadeAnimation>();
+            animation = new List<Animation>();
             images = new List<Texture2D>();
+            fadeAnimation = new FadeAnimation();
 
             fileManager.LoadContent("Load/Splash.ma", attributes, contents);
             for (int i = 0; i < attributes.Count; i++)
@@ -42,7 +44,7 @@ namespace GamePlatform2D
                     {
                         case "Image":
                             images.Add(this.content.Load<Texture2D>(contents[i][n]));
-                            fade.Add(new FadeAnimation());
+                            animation.Add(new FadeAnimation());
                             break;
 
                         case "Sound":
@@ -50,12 +52,11 @@ namespace GamePlatform2D
                     }
                 }
             }
-            for (int i = 0; i < fade.Count; i++)
+            for (int i = 0; i < animation.Count; i++)
             {
-                fade[i].LoadContent(content, images[i], "", new Vector2(120, 40));
-                // ImageWIdth / 2 * scale - (ImageWidth/2) = X
-                fade[i].Scale = 2.0f;
-                fade[i].IsActive = true;
+                animation[i].LoadContent(content, images[i], "", new Vector2(120, 40));
+                animation[i].Scale = 2.0f;
+                animation[i].IsActive = true;
             }
         }
 
@@ -69,22 +70,26 @@ namespace GamePlatform2D
         {
             inputManager.Update();
 
-            if (fade[imageNumber].Alpha == 0.0f)
+            Animation a = animation[imageNumber];
+            fadeAnimation.Update(gameTime, ref a);
+            animation[imageNumber] = a;
+
+            if (animation[imageNumber].Alpha == 0.0f)
                 imageNumber++;
 
-            if (imageNumber >= fade.Count - 1 || inputManager.KeyPressed(Keys.Z))
+            if (imageNumber >= animation.Count - 1 || inputManager.KeyPressed(Keys.Z))
             {
-                if (fade[imageNumber].Alpha != 1.0f)
-                    ScreenManager.Instance.AddScreen(new TitleScreen(), inputManager, fade[imageNumber].Alpha);
+                if (animation[imageNumber].Alpha != 1.0f)
+                    ScreenManager.Instance.AddScreen(new TitleScreen(), inputManager, animation[imageNumber].Alpha);
                 else
                     ScreenManager.Instance.AddScreen(new TitleScreen(), inputManager);
             }
-            fade[imageNumber].Update(gameTime);
+            
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            fade[imageNumber].Draw(spriteBatch);
+            animation[imageNumber].Draw(spriteBatch);
         }
         #endregion
 

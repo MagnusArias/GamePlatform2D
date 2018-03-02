@@ -8,21 +8,17 @@ namespace GamePlatform2D
 {
     public class Player : Entity
     {
-        string text;
-        SpriteFont font;
 
+        float jumpSpeed;
         public override void LoadContent(ContentManager content, InputManager input)
         {
             base.LoadContent(content, input);
             fileManager = new FileManager();
-            moveAnimation = new SpriteSheetAnimation();
+            moveAnimation = new Animation();
             Vector2 tempFrames = Vector2.Zero;
-            //position = Vector2.Zero;
+
             moveSpeed = 100.0f;
-            
-            text = "";
-            if (font == null)
-                font = this.content.Load<SpriteFont>("Font1");
+            jumpSpeed = 50.0f;
 
             fileManager.LoadContent("Load/Player.ma", attributes, contents);
             for (int i = 0; i < attributes.Count; i++)
@@ -52,6 +48,11 @@ namespace GamePlatform2D
                 }
             }
 
+            gravity = 100.0f;
+            velocity = Vector2.Zero;
+            syncTilePosition = false;
+            activateGravity = true;
+            moveAnimation.Frames = new Vector2(3, 4);
             moveAnimation.LoadContent(content, image, "", position);
         }
 
@@ -61,64 +62,43 @@ namespace GamePlatform2D
             moveAnimation.UnloadContent();
         }
 
-        public override void Update(GameTime gameTime, InputManager input, Collision col, Layers layer)
+        public override void Update(GameTime gameTime, InputManager input, Collision col, Layer layer)
         {
             moveAnimation.IsActive = true;
             if (input.KeyDown(Keys.Right, Keys.D))
             {
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 2);
-                position.X += moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                velocity.X = moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
             else if (input.KeyDown(Keys.Left, Keys.A))
             {
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 1);
-                position.X -= moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                velocity.X = -moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-            else if (input.KeyDown(Keys.Up, Keys.W))
+            else
             {
-                moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 3);
-                position.Y -= moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            else if (input.KeyDown(Keys.Down, Keys.S))
-            {
-                moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 0);
-                position.Y += moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            }
-            else moveAnimation.IsActive = false;
-
-
-            for (int i = 0; i < col.CollisionMap.Count; i++)
-            {
-                for (int j = 0; j < col.CollisionMap[i].Count; j++)
-                {
-                    if (col.CollisionMap[i][j] == "x")
-                    {
-                        if (position.X + moveAnimation.FrameWidth < j * layer.TileDimensions.X ||
-                                position.X > j * layer.TileDimensions.X + layer.TileDimensions.X ||
-                                position.Y + moveAnimation.FrameHeight < i * layer.TileDimensions.Y ||
-                                position.Y > i * layer.TileDimensions.Y + layer.TileDimensions.Y)
-                        {
-                            // no collision
-                        }
-                        else
-                        {
-                            position = moveAnimation.Position;
-                        }
-                    }
-                }
+                moveAnimation.IsActive = false;
+                velocity.X = 0;
             }
 
+            if (input.KeyDown(Keys.Up, Keys.W) && !activateGravity)
+            {
+                position.Y = -jumpSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                activateGravity = true;
+            }
+
+            if (activateGravity)
+                velocity.Y = gravity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            else
+                velocity.Y = 0;
 
             moveAnimation.Position = position;
-            moveAnimation.Update(gameTime);
-
-
+            ssAnimation.Update(gameTime, ref moveAnimation);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             moveAnimation.Draw(spriteBatch);
-            spriteBatch.DrawString(font, text, new Vector2(200, 200), Color.Black);
         }
     }
 }

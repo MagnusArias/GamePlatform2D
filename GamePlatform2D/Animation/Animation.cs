@@ -13,16 +13,16 @@ namespace GamePlatform2D
     public class Animation
     {
         #region Variables
-        protected Texture2D image;
-        protected string text;
-        protected SpriteFont font;
-        protected Color color;
-        protected Rectangle sourceRect;
-        protected float rotation, scale, axis;
-        protected Vector2 origin, position;
-        protected ContentManager content;
-        protected bool isActive;
-        protected float alpha;
+        private Texture2D image;
+        private string text;
+        private SpriteFont font;
+        private Color color;
+        private Rectangle sourceRect;
+        private float rotation, scale, axis, alpha;
+        private Vector2 origin, position, frames, currentFrame;
+        private ContentManager content;
+        private bool isActive;
+
         #endregion
 
         #region Properties
@@ -55,10 +55,42 @@ namespace GamePlatform2D
             get { return font; }
             set { font = value; }
         }
+        public Vector2 Frames
+        {
+            set { frames = value; }
+            get { return frames; }
+        }
+
+        public Vector2 CurrentFrame
+        {
+            set { currentFrame = value; }
+            get { return currentFrame; }
+        }
+
+        public int FrameWidth
+        {
+            get { return image.Width / (int)Frames.X; }
+        }
+
+        public int FrameHeight
+        {
+            get { return image.Height / (int)Frames.Y; }
+        }
+
+        public Rectangle SourceRect
+        {
+            get { return sourceRect; }
+            set { sourceRect = value; }
+        }
+
+        public Texture2D Image
+        {
+            get { return image; }
+        }
         #endregion
 
-        #region Methods
-        public virtual void LoadContent(ContentManager Content, Texture2D image, string text, Vector2 position)
+        #region Public Methods
+        public void LoadContent(ContentManager Content, Texture2D image, string text, Vector2 position)
         {
             content = new ContentManager(Content.ServiceProvider, "Content");
 
@@ -72,17 +104,19 @@ namespace GamePlatform2D
                 color = new Color(114, 77, 233);
             }
 
-            if (image != null)
-                sourceRect = new Rectangle(0, 0, image.Width, image.Height);
-
             rotation = 0.0f;
             axis = 0.0f;
             scale = 1.0f;
             alpha = 1.0f;
             isActive = false;
+            currentFrame = new Vector2(0, 0);
+            if (image != null && frames != Vector2.Zero)
+                sourceRect = new Rectangle((int)currentFrame.X * FrameWidth, (int)currentFrame.Y * FrameHeight, FrameWidth, FrameHeight);
+            else
+                sourceRect = new Rectangle(0, 0, image.Width, image.Height);
         }
 
-        public virtual void UnloadContent()
+        public void UnloadContent()
         {
             content.Unload();
             text = String.Empty;
@@ -91,9 +125,12 @@ namespace GamePlatform2D
             image = null;
         }
 
-        public virtual void Update(GameTime gameTime) { }
+        public virtual void Update(GameTime gameTime, ref Animation a)
+        {
 
-        public virtual void Draw(SpriteBatch spriteBatch)
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
         {
             if (image != null)
             {

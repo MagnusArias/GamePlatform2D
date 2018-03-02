@@ -10,24 +10,19 @@ namespace GamePlatform2D
     public class MenuManager
     {
         #region Variables
-        List<string> menuItems;
-        List<string> animationTypes;
+        List<string> menuItems, animationTypes, linkType, linkID;
         List<Texture2D> menuImages;
-        List<List<Animation>> animation;
-
         ContentManager content;
         Rectangle sourceRect;
         Vector2 position;
-        int axis;
-
-        int itemNumber;
-
+        int axis, itemNumber;
         FileManager fileManager;
         List<List<string>> attributes, contents;
-        List<string> linkType, linkID;
-        List<Animation> tempAnimation;
+        List<Animation> animation, tempAnimation;
         SpriteFont font;
         string align;
+        FadeAnimation fAnimation;
+        SpriteSheetAnimation ssAnimation;
         #endregion
 
         #region Properties
@@ -41,12 +36,14 @@ namespace GamePlatform2D
             menuItems = new List<string>();
             animationTypes = new List<string>();
             menuImages = new List<Texture2D>();
-            animation = new List<List<Animation>>();
+            animation = new List<Animation>();
             fileManager = new FileManager();
             attributes = new List<List<string>>();
             contents = new List<List<string>>();
             linkType = new List<string>();
             linkID = new List<string>();
+            fAnimation = new FadeAnimation();
+            ssAnimation = new SpriteSheetAnimation();
 
             position = Vector2.Zero;
             itemNumber = 0;
@@ -124,25 +121,13 @@ namespace GamePlatform2D
         {
             if (axis == 1)
             {
-                if (inputManager.KeyPressed(Keys.Right, Keys.D))
-                {
-                    itemNumber++;
-                }
-                else if (inputManager.KeyPressed(Keys.Left, Keys.A))
-                {
-                    itemNumber--;
-                }
+                if (inputManager.KeyPressed(Keys.Right, Keys.D)) itemNumber++;
+                else if (inputManager.KeyPressed(Keys.Left, Keys.A)) itemNumber--;
             }
             else
             {
-                if (inputManager.KeyPressed(Keys.Down, Keys.S))
-                {
-                    itemNumber++;
-                }
-                else if (inputManager.KeyPressed(Keys.Up, Keys.W))
-                {
-                    itemNumber--;
-                }
+                if (inputManager.KeyPressed(Keys.Down, Keys.S)) itemNumber++;
+                else if (inputManager.KeyPressed(Keys.Up, Keys.W)) itemNumber--;
             }
 
             if (inputManager.KeyPressed(Keys.Enter, Keys.Z))
@@ -158,14 +143,27 @@ namespace GamePlatform2D
 
             for (int i = 0; i < animation.Count; i++)
             {
-                for (int j = 0; j < animation[i].Count; j++)
+                for (int j = 0; j < animationTypes.Count; j++)
                 {
                     if (itemNumber == i)
-                        animation[i][j].IsActive = true;
+                        animation[i].IsActive = true;
                     else
-                        animation[i][j].IsActive = false;
+                        animation[i].IsActive = false;
 
-                    animation[i][j].Update(gameTime);
+                    Animation a = animation[i];
+
+                    switch (animationTypes[i])
+                    {
+                        case "Fade":
+                            fAnimation.Update(gameTime, ref a);
+                            break;
+
+                        case "SSheet":
+                            ssAnimation.Update(gameTime, ref a);
+                            break;
+                    }
+
+                    animation[i] = a;
                 }
             }
         }
@@ -174,10 +172,7 @@ namespace GamePlatform2D
         {
             for (int i = 0; i < animation.Count; i++)
             {
-                for (int j = 0; j < animation[i].Count; j++)
-                {
-                    animation[i][j].Draw(spriteBatch);
-                }
+                animation[i].Draw(spriteBatch);
             }
         }
         #endregion
@@ -226,20 +221,9 @@ namespace GamePlatform2D
                 if (axis == 1) pos.Y = (ScreenManager.Instance.Dimensions.Y - dimensions.Y) / 2;
                 else pos.X = (ScreenManager.Instance.Dimensions.X - dimensions.X) / 2;
 
-                for (int j = 0; j < animationTypes.Count; j++)
-                {
-                    switch (animationTypes[j])
-                    {
-                        case "Fade":
-                            tempAnimation.Add(new FadeAnimation());
-                            tempAnimation[tempAnimation.Count - 1].LoadContent(content, menuImages[i], menuItems[i], pos);
-                            tempAnimation[tempAnimation.Count - 1].Font = font;
-                            break;
-                    }
-                }
-
-                if (tempAnimation.Count > 0) animation.Add(tempAnimation);
-                tempAnimation = new List<Animation>();
+                animation.Add(new Animation());
+                animation[animation.Count - 1].LoadContent(content, menuImages[i], menuItems[i], pos);
+                animation[animation.Count - 1].Font = font;
 
                 if (axis == 1) pos.X += dimensions.X;
                 else pos.Y += dimensions.Y;
