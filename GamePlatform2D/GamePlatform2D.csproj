@@ -42,14 +42,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Animation\Animation.cs" />
-    <Compile Include="Collision.cs" />
+    <Compile Include="Map\Layer.cs" />
+    <Compile Include="Map\Collision.cs" />
     <Compile Include="Entity\Enemy.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Animation\FadeAnimation.cs" />
-    <Compile Include="Layers.cs" />
+    <Compile Include="Map\Layers.cs" />
     <Compile Include="Managers\FileManager.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="Map.cs" />
+    <Compile Include="Map\Map.cs" />
     <Compile Include="Screens\GameplayScreen.cs" />
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Managers\MenuManager.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="Screens\SplashScreen.cs" />
     <Compile Include="Animation\SpriteSheetAnimation.cs" />
     <Compile Include="Screens\TitleScreen.cs" />
+    <Compile Include="Map\Tile.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

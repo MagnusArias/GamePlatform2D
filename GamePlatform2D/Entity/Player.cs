@@ -18,7 +18,8 @@ namespace GamePlatform2D
             moveAnimation = new SpriteSheetAnimation();
             Vector2 tempFrames = Vector2.Zero;
             //position = Vector2.Zero;
-
+            moveSpeed = 100.0f;
+            
             text = "";
             if (font == null)
                 font = this.content.Load<SpriteFont>("Font1");
@@ -63,8 +64,26 @@ namespace GamePlatform2D
         public override void Update(GameTime gameTime, InputManager input, Collision col, Layers layer)
         {
             moveAnimation.IsActive = true;
-            if (input.KeyDown(Keys.Right, Keys.D)) moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 2);
-            else if (input.KeyDown(Keys.Left, Keys.A)) moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 1);
+            if (input.KeyDown(Keys.Right, Keys.D))
+            {
+                moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 2);
+                position.X += moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else if (input.KeyDown(Keys.Left, Keys.A))
+            {
+                moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 1);
+                position.X -= moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else if (input.KeyDown(Keys.Up, Keys.W))
+            {
+                moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 3);
+                position.Y -= moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else if (input.KeyDown(Keys.Down, Keys.S))
+            {
+                moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 0);
+                position.Y += moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
             else moveAnimation.IsActive = false;
 
 
@@ -72,22 +91,25 @@ namespace GamePlatform2D
             {
                 for (int j = 0; j < col.CollisionMap[i].Count; j++)
                 {
-                    if (position.X + moveAnimation.FrameWidth < j * layer.TileDimensions.X ||
-                            position.X > j * layer.TileDimensions.X + layer.TileDimensions.X ||
-                            position.Y + moveAnimation.FrameHeight < i * layer.TileDimensions.Y ||
-                            position.Y > i * layer.TileDimensions.Y + layer.TileDimensions.Y)
+                    if (col.CollisionMap[i][j] == "x")
                     {
-                        // no collision
-                    }
-                    else
-                    {
-
+                        if (position.X + moveAnimation.FrameWidth < j * layer.TileDimensions.X ||
+                                position.X > j * layer.TileDimensions.X + layer.TileDimensions.X ||
+                                position.Y + moveAnimation.FrameHeight < i * layer.TileDimensions.Y ||
+                                position.Y > i * layer.TileDimensions.Y + layer.TileDimensions.Y)
+                        {
+                            // no collision
+                        }
+                        else
+                        {
+                            position = moveAnimation.Position;
+                        }
                     }
                 }
             }
 
 
-
+            moveAnimation.Position = position;
             moveAnimation.Update(gameTime);
 
 

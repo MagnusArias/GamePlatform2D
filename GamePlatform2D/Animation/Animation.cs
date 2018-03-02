@@ -26,6 +26,12 @@ namespace GamePlatform2D
         #endregion
 
         #region Properties
+
+        public Vector2 Position
+        {
+            set { position = value; }
+            get { return position; }
+        }
         public bool IsActive
         {
             set { isActive = value; }

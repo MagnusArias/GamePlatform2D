@@ -42,6 +42,11 @@ namespace GamePlatform2D
             get { return nullImage; }
 
         }
+
+        public ContentManager Content
+        {
+            get { return content; }
+        }
         #endregion
 
         #region Public Methods

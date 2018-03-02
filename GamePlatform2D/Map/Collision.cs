@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GamePlatform2D
 {
-    public class Collision : Map
+    public class Collision
     {
         FileManager fileManager;
         List<List<string>> attributes, contents, collisionMap;

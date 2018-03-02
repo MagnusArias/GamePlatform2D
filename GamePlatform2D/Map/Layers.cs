@@ -87,6 +87,12 @@ namespace GamePlatform2D
             }
         }
 
+        public void UnloadContent()
+        {
+            content.Unload();
+            fileManager = null;
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < tileMap[layerNumber].Count; i++)

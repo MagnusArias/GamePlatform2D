@@ -37,7 +37,7 @@ namespace GamePlatform2D
             content.Unload();
         }
 
-        public virtual void Update(GameTime gameTime, InputManager input)
+        public virtual void Update(GameTime gameTime, InputManager input, Collision col, Layers layer)
         {
 
         }

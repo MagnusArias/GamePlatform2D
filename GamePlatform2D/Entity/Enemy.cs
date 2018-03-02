@@ -22,7 +22,7 @@ namespace GamePlatform2D
             base.UnloadContent();
         }
 
-        public override void Update(GameTime gameTime, InputManager input)
+        public override void Update(GameTime gameTime, InputManager input, Collision col, Layers layer)
         {
   
         }

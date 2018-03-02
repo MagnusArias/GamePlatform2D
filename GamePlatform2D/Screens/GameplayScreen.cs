@@ -11,6 +11,7 @@ namespace GamePlatform2D
         #region Variables
         Player player;
         Layers layer;
+        Map map;
         #endregion
 
         #region Properties
@@ -23,27 +24,30 @@ namespace GamePlatform2D
             base.LoadContent(content, input);
             player = new Player();
             layer = new Layers();
+            map = new Map();
 
             player.LoadContent(content, input);
-            layer.LoadContent(content, "Map1");
+            map.LoadContent(content, map, "Map1");
         }
 
         public override void UnloadContent()
         {
             base.UnloadContent();
             player.UnloadContent();
+            map.UnloadContent();
         }
 
         public override void Update(GameTime gameTime)
         {
             inputManager.Update();
-            player.Update(gameTime, inputManager);
+            //player.Update(gameTime, inputManager, map.collision, map.layer);
+            map.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            layer.Draw(spriteBatch);
+            map.Draw(spriteBatch);
             player.Draw(spriteBatch);
         }
         #endregion
