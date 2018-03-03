@@ -9,7 +9,7 @@ namespace GamePlatform2D
     public class GameplayScreen : GameScreen
     {
         #region Variables
-        Player player;
+        EntityManager player, enemies;
         Layers layer;
         Map map;
         #endregion
@@ -22,11 +22,12 @@ namespace GamePlatform2D
         public override void LoadContent(ContentManager content, InputManager input)
         {
             base.LoadContent(content, input);
-            player = new Player();
+            player = new EntityManager();
+            enemies = new EntityManager();
             layer = new Layers();
             map = new Map();
-
-            player.LoadContent(content, input);
+            player.LoadContent("Player", content, "Load/Player.ma", "", input);
+            enemies.LoadContent("Enemy", content, "Load/Enemy.ma", "Level1", input);
             map.LoadContent(content, map, "Map1");
         }
 
@@ -34,14 +35,31 @@ namespace GamePlatform2D
         {
             base.UnloadContent();
             player.UnloadContent();
+            enemies.UnloadContent();
             map.UnloadContent();
         }
 
         public override void Update(GameTime gameTime)
         {
             inputManager.Update();
-            player.Update(gameTime, inputManager, map.collision, map.layer);
-            map.Update(gameTime, ref player);
+            player.Update(gameTime, map);
+            enemies.Update(gameTime, map);
+            map.Update(gameTime);
+
+            Entity e;
+            for (int i = 0; i < player.Entities.Count; i++)
+            {
+                e = player.Entities[i];
+                map.UpdateCollision(ref e);
+                player.Entities[i] = e;
+            }
+
+            for (int i = 0; i < enemies.Entities.Count; i++)
+            {
+                e = enemies.Entities[i];
+                map.UpdateCollision(ref e);
+                enemies.Entities[i] = e;
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -49,6 +67,7 @@ namespace GamePlatform2D
             base.Draw(spriteBatch);
             map.Draw(spriteBatch);
             player.Draw(spriteBatch);
+            enemies.Draw(spriteBatch);
         }
         #endregion
 

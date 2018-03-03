@@ -37,9 +37,14 @@ namespace GamePlatform2D
             //collision.UnloadContent();
         }
 
-        public void Update(GameTime gameTime, ref Player player)
+        public void Update(GameTime gameTime)
         {
-            layer.Update(gameTime, ref player);
+            layer.Update(gameTime);
+        }
+
+        public void UpdateCollision(ref Entity e)
+        {
+            layer.UpdateCollision(ref e);
         }
 
         public void Draw(SpriteBatch spriteBatch)

@@ -98,17 +98,27 @@ namespace GamePlatform2D
             }
         }
 
-        public void Update(GameTime gameTime, ref Player player)
+        public void Update(GameTime gameTime)
         {
             for (int i = 0; i < tiles.Count; i++)
             {
                 for (int j = 0; j < tiles[i].Count; j++)
                 {
-                    tiles[i][j].Update(gameTime, ref player);
+                    tiles[i][j].Update(gameTime);
                 }
             }
         }
 
+        public void UpdateCollision(ref Entity e)
+        {
+            for (int i = 0; i < tiles.Count; i++)
+            {
+                for (int j = 0; j < tiles[i].Count; j++)
+                {
+                    tiles[i][j].UpdateCollision(ref e);
+                }
+            }
+        }
         public void Draw(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < tiles.Count; i++)

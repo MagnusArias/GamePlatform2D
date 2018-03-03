@@ -86,6 +86,9 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
+    <None Include="Load\Enemy.ma">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Load\Maps\Map1.mma">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

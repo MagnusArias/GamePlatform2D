@@ -6,17 +6,17 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GamePlatform2D
 {
-    public class Entity
+    public abstract class Entity
     {
         #region Variables
-        protected int health;
+        protected int health, range;
         protected Animation moveAnimation;
         protected SpriteSheetAnimation ssAnimation;
         protected float moveSpeed, gravity, jumpSpeed;
         protected ContentManager content;
         protected Texture2D image;
         protected Vector2 position, velocity, prevPosition;
-        protected bool activateGravity, syncTilePosition;
+        protected bool activateGravity, syncTilePosition, onTile;
 
         protected List<List<string>> attributes, contents;
         #endregion
@@ -26,6 +26,13 @@ namespace GamePlatform2D
         {
             get { return prevPosition; }
         }
+
+        public bool OnTile
+        {
+            get { return onTile; }
+            set { onTile = value; }
+        }
+
         public Vector2 Position
         {
             get { return position; }
@@ -53,12 +60,20 @@ namespace GamePlatform2D
             get { return velocity; }
             set { velocity = value; }
         }
+
+        public FloatRect Rect
+        {
+            get { return new FloatRect(position.X, position.Y, moveAnimation.FrameWidth, moveAnimation.FrameHeight); }
+        }
         #endregion
 
         #region Public Methods
         public virtual void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input)
         {
             this.content = new ContentManager(content.ServiceProvider, "Content");
+            moveAnimation = new Animation();
+            ssAnimation = new SpriteSheetAnimation();
+
             for (int i = 0; i < attributes.Count; i++)
             {
                 switch (attributes[i])
@@ -69,7 +84,7 @@ namespace GamePlatform2D
 
                     case "Frames":
                         string[] frames = contents[i].Split(' ');
-                        moveAnimation.Frames = new Vector2(float.Parse(frames[0]), float.Parse(frames[1]));
+                        moveAnimation.Frames = new Vector2(int.Parse(frames[0]), int.Parse(frames[1]));
                         break;
 
                     case "Image":
@@ -85,13 +100,13 @@ namespace GamePlatform2D
                         moveSpeed = float.Parse(contents[i]);
                         break;
 
+                    case "Range":
+                        range = int.Parse(contents[i]);
+                        break;
                 }
             }
 
-            moveAnimation = new Animation();
-            ssAnimation = new SpriteSheetAnimation();
             jumpSpeed = 250.0f;
-
             gravity = 10.0f;
             velocity = Vector2.Zero;
             syncTilePosition = false;

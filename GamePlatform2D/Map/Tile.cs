@@ -24,7 +24,7 @@ namespace GamePlatform2D
         int counter;
         bool increase;
         float moveSpeed;
-        bool onTile;
+        bool containsEntity;
 
         Animation animation;
 
@@ -56,7 +56,7 @@ namespace GamePlatform2D
             this.state = state;
             this.motion = motion;
             this.position = position;
-            onTile = false;
+            containsEntity = false;
             velocity = new Vector2(0, 0);
             tileImage = CropImage(tileSheet, tileArea);
             range = 50;
@@ -67,7 +67,7 @@ namespace GamePlatform2D
             animation.LoadContent(ScreenManager.Instance.Content, tileImage, "", position);
         }
 
-        public void Update(GameTime gameTime, ref Player player)
+        public void Update(GameTime gameTime)
         {
             counter++;
             prevPosition = position;
@@ -92,54 +92,59 @@ namespace GamePlatform2D
 
             position += velocity;
             animation.Position = position;
+        }
 
+        public void UpdateCollision(ref Entity e)
+        {
             FloatRect rect = new FloatRect(position.X, position.Y, Layer.TileDimensions.X, Layer.TileDimensions.Y);
 
-            if (onTile)
+            if (e.OnTile && containsEntity)
             {
-                if (!player.SyncTilePosition)
+                if (!e.SyncTilePosition)
                 {
-                    player.Position += velocity;
-                    player.SyncTilePosition = true;
+                    e.Position += velocity;
+                    e.SyncTilePosition = true;
                 }
 
-                if (player.Rect.Right < rect.Left || player.Rect.Left > rect.Right || player.Rect.Bottom != rect.Top)
+                if (e.Rect.Right < rect.Left || e.Rect.Left > rect.Right || e.Rect.Bottom != rect.Top)
                 {
-                    onTile = false;
-                    player.ActivateGravity = true;
+                    e.OnTile = false;
+                    containsEntity = false;
+                    e.ActivateGravity = true;
                 }
             }
 
-            if (player.Rect.Intersects(rect) && state == State.Solid)
+            if (e.Rect.Intersects(rect) && state == State.Solid)
             {
-                FloatRect prevPlayer = new FloatRect(player.PrevPosition.X, player.PrevPosition.Y, player.Animation.FrameWidth, player.Animation.FrameHeight);
+                FloatRect preve = new FloatRect(e.PrevPosition.X, e.PrevPosition.Y, e.Animation.FrameWidth, e.Animation.FrameHeight);
                 FloatRect prevTile = new FloatRect(prevPosition.X, prevPosition.Y, Layer.TileDimensions.X, Layer.TileDimensions.Y);
 
-                if (player.Rect.Bottom >= rect.Top && prevPlayer.Bottom <= prevTile.Top)
+                if (e.Rect.Bottom >= rect.Top && preve.Bottom <= prevTile.Top)
                 {
                     // bottom collision
-                    player.Position = new Vector2(player.Position.X, position.Y - player.Animation.FrameHeight);
-                    player.ActivateGravity = false;
-                    onTile = true;
+                    e.Position = new Vector2(e.Position.X, position.Y - e.Animation.FrameHeight);
+                    e.ActivateGravity = false;
+                    e.OnTile = true;
+                    containsEntity = true;
                 }
-                else if (player.Rect.Top <= rect.Bottom && prevPlayer.Top >= prevTile.Bottom)
+                else if (e.Rect.Top <= rect.Bottom && preve.Top >= prevTile.Bottom)
                 {
                     // top collision
-                    player.Position = new Vector2(player.Position.X, position.Y + Layer.TileDimensions.Y);
-                    player.Velocity = new Vector2(player.Velocity.X, 0);
-                    player.ActivateGravity = true;
+                    e.Position = new Vector2(e.Position.X, position.Y + Layer.TileDimensions.Y);
+                    e.Velocity = new Vector2(e.Velocity.X, 0);
+                    e.ActivateGravity = true;
                 }
                 else
                 {
-                    player.Position -= player.Velocity;
+                    e.Position -= e.Velocity;
                 }
             }
-            player.Animation.Position = player.Position;
+            e.Animation.Position = e.Position;
         }
 
-        public void Draw(SpriteBatch sb)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            animation.Draw(sb);
+            animation.Draw(spriteBatch);
         }
     }
 }

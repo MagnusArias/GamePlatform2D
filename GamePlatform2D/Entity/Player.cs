@@ -8,14 +8,9 @@ namespace GamePlatform2D
 {
     public class Player : Entity
     {
-        public FloatRect Rect
-        {
-            get { return new FloatRect(position.X, position.Y, moveAnimation.FrameWidth, moveAnimation.FrameHeight); }
-        }
-
         public override void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input)
         {
-            base.LoadContent(content,attributes, contents,  input);
+            base.LoadContent(content, attributes, contents, input);
         }
 
         public override void UnloadContent()

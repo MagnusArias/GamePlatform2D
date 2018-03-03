@@ -18,7 +18,7 @@ namespace GamePlatform2D
         private SpriteFont font;
         private Color color;
         private Rectangle sourceRect;
-        private float rotation, scale, axis, alpha;
+        private float rotation, scale, alpha;
         private Vector2 origin, position, frames, currentFrame;
         private ContentManager content;
         private bool isActive;
@@ -105,7 +105,6 @@ namespace GamePlatform2D
             }
 
             rotation = 0.0f;
-            axis = 0.0f;
             scale = 1.0f;
             alpha = 1.0f;
             isActive = false;
