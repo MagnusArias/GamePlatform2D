@@ -27,7 +27,7 @@ namespace GamePlatform2D
 
         public override void Update(GameTime gameTime, ref Animation a)
         {
-            CurrentFrame = a.CurrentFrame;
+            currentFrame = a.CurrentFrame;
             if (a.IsActive)
             {
                 frameCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;

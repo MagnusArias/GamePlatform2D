@@ -10,7 +10,7 @@ namespace GamePlatform2D
     {
         #region Variables
         EntityManager player, enemies;
-        Layers layer;
+        //Layers layer;
         Map map;
         #endregion
 
@@ -24,7 +24,7 @@ namespace GamePlatform2D
             base.LoadContent(content, input);
             player = new EntityManager();
             enemies = new EntityManager();
-            layer = new Layers();
+            //layer = new Layers();
             map = new Map();
             player.LoadContent("Player", content, "Load/Player.ma", "", input);
             enemies.LoadContent("Enemy", content, "Load/Enemy.ma", "Level1", input);
