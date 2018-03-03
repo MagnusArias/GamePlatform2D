@@ -36,7 +36,7 @@ namespace GamePlatform2D
                     frameCounter = 0;
                     currentFrame.X++;
 
-                    if (currentFrame.X * FrameWidth >= a.Image.Width) currentFrame.X = 0;
+                    if (currentFrame.X * a.FrameWidth >= a.Image.Width) currentFrame.X = 0;
                 }
             }
             else
@@ -45,7 +45,7 @@ namespace GamePlatform2D
                 currentFrame.X = 1;
             }
             a.CurrentFrame = currentFrame;
-            a.SourceRect = new Rectangle((int)currentFrame.X * FrameWidth, (int)currentFrame.Y * FrameHeight, FrameWidth, FrameHeight);
+            a.SourceRect = new Rectangle((int)currentFrame.X * a.FrameWidth, (int)currentFrame.Y * a.FrameHeight, a.FrameWidth, a.FrameHeight);
         }
 
         #endregion

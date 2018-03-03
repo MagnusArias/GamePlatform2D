@@ -23,7 +23,37 @@ namespace GamePlatform2D
         #endregion
 
         #region Properties
+        public Vector2 PrevPosition
+        {
+            get { return prevPosition; }
+        }
+        public Vector2 Position
+        {
+            get { return position; }
+            set { position = value; }
+        }
 
+        public bool ActivateGravity
+        {
+            set { activateGravity = value; }
+            get { return activateGravity; }
+        }
+
+        public bool SyncTilePosition
+        {
+            get { return syncTilePosition; }
+            set { syncTilePosition = value; }
+        }
+        public Animation Animation
+        {
+            get { return moveAnimation; }
+        }
+
+        public Vector2 Velocity
+        {
+            get { return velocity; }
+            set { velocity = value; }
+        }
         #endregion
 
         #region Public Methods

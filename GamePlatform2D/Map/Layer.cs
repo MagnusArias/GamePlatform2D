@@ -19,6 +19,11 @@ namespace GamePlatform2D
         ContentManager content;
         Texture2D tileSheet;
 
+        public static Vector2 TileDimensions
+        {
+            get { return new Vector2(32, 32); }
+        }
+
         public void LoadContent(Map map, string layerID)
         {
             tiles = new List<List<Tile>>();
@@ -93,13 +98,13 @@ namespace GamePlatform2D
             }
         }
 
-        public void Update (GameTime gameTime)
+        public void Update(GameTime gameTime, ref Player player)
         {
             for (int i = 0; i < tiles.Count; i++)
             {
                 for (int j = 0; j < tiles[i].Count; j++)
                 {
-                    tiles[i][j].Update(gameTime);
+                    tiles[i][j].Update(gameTime, ref player);
                 }
             }
         }

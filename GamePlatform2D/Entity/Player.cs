@@ -8,17 +8,23 @@ namespace GamePlatform2D
 {
     public class Player : Entity
     {
-
         float jumpSpeed;
+
+        public FloatRect Rect
+        {
+            get { return new FloatRect(position.X, position.Y, moveAnimation.FrameWidth, moveAnimation.FrameHeight); }
+        }
+
         public override void LoadContent(ContentManager content, InputManager input)
         {
             base.LoadContent(content, input);
             fileManager = new FileManager();
             moveAnimation = new Animation();
+            ssAnimation = new SpriteSheetAnimation();
             Vector2 tempFrames = Vector2.Zero;
 
             moveSpeed = 100.0f;
-            jumpSpeed = 50.0f;
+            jumpSpeed = 250.0f;
 
             fileManager.LoadContent("Load/Player.ma", attributes, contents);
             for (int i = 0; i < attributes.Count; i++)
@@ -48,7 +54,7 @@ namespace GamePlatform2D
                 }
             }
 
-            gravity = 100.0f;
+            gravity = 10.0f;
             velocity = Vector2.Zero;
             syncTilePosition = false;
             activateGravity = true;
@@ -64,6 +70,8 @@ namespace GamePlatform2D
 
         public override void Update(GameTime gameTime, InputManager input, Collision col, Layer layer)
         {
+            syncTilePosition = false;
+            prevPosition = position;
             moveAnimation.IsActive = true;
             if (input.KeyDown(Keys.Right, Keys.D))
             {
@@ -83,14 +91,16 @@ namespace GamePlatform2D
 
             if (input.KeyDown(Keys.Up, Keys.W) && !activateGravity)
             {
-                position.Y = -jumpSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                velocity.Y = -jumpSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 activateGravity = true;
             }
 
             if (activateGravity)
-                velocity.Y = gravity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                velocity.Y += gravity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             else
                 velocity.Y = 0;
+
+            position += velocity;
 
             moveAnimation.Position = position;
             ssAnimation.Update(gameTime, ref moveAnimation);

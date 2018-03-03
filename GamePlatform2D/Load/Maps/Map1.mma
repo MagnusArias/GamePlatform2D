@@ -12,6 +12,7 @@ Load=[TileSet]
 
 Load=[Solid]
 [2,0]
+[1,0]
 
 Load=[Motion]
 [2,0:Horizontal]

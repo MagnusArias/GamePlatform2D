@@ -81,7 +81,7 @@ namespace GamePlatform2D
 
         public void Initialize()
         {
-            currentScreen = new SplashScreen();
+            currentScreen = new GameplayScreen();
             fade = new FadeAnimation();
             inputManager = new InputManager();
         }

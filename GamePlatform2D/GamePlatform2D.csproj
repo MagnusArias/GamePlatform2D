@@ -42,6 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Animation\Animation.cs" />
+    <Compile Include="FloatRect.cs" />
     <Compile Include="Map\Layer.cs" />
     <Compile Include="Map\Collision.cs" />
     <Compile Include="Entity\Enemy.cs" />
