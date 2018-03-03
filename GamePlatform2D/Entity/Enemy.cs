@@ -12,10 +12,11 @@ namespace GamePlatform2D
 {
     public class Enemy : Entity
     {
-        public override void LoadContent(ContentManager content, InputManager input)
+        public override void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input)
         {
-            base.LoadContent(content, input);
+            base.LoadContent(content, attributes, contents, input);
         }
+
 
         public override void UnloadContent()
         {

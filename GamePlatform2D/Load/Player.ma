@@ -1,2 +1,2 @@
-﻿Load=[Image][Position][Frames]
-[player][20 20][3 4]
+﻿Load=[Image][Position][Frames][MoveSpeed]
+[player][20 20][3 4][100]

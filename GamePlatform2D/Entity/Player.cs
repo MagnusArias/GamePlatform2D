@@ -8,58 +8,14 @@ namespace GamePlatform2D
 {
     public class Player : Entity
     {
-        float jumpSpeed;
-
         public FloatRect Rect
         {
             get { return new FloatRect(position.X, position.Y, moveAnimation.FrameWidth, moveAnimation.FrameHeight); }
         }
 
-        public override void LoadContent(ContentManager content, InputManager input)
+        public override void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input)
         {
-            base.LoadContent(content, input);
-            fileManager = new FileManager();
-            moveAnimation = new Animation();
-            ssAnimation = new SpriteSheetAnimation();
-            Vector2 tempFrames = Vector2.Zero;
-
-            moveSpeed = 100.0f;
-            jumpSpeed = 250.0f;
-
-            fileManager.LoadContent("Load/Player.ma", attributes, contents);
-            for (int i = 0; i < attributes.Count; i++)
-            {
-                for (int j = 0; j < attributes[i].Count; j++)
-                {
-                    switch (attributes[i][j])
-                    {
-                        case "Health":
-                            health = int.Parse(contents[i][j]);
-                            break;
-
-                        case "Frames":
-                            string[] frames = contents[i][j].Split(' ');
-                            tempFrames = new Vector2(float.Parse(frames[0]), float.Parse(frames[1]));
-                            break;
-
-                        case "Image":
-                            image = this.content.Load<Texture2D>(contents[i][j]);
-                            break;
-
-                        case "Position":
-                            string[] pos = contents[i][j].Split(' ');
-                            position = new Vector2(float.Parse(pos[0]), float.Parse(pos[1]));
-                            break;
-                    }
-                }
-            }
-
-            gravity = 10.0f;
-            velocity = Vector2.Zero;
-            syncTilePosition = false;
-            activateGravity = true;
-            moveAnimation.Frames = new Vector2(3, 4);
-            moveAnimation.LoadContent(content, image, "", position);
+            base.LoadContent(content,attributes, contents,  input);
         }
 
         public override void UnloadContent()
