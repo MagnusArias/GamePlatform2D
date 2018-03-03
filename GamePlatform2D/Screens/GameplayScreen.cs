@@ -26,8 +26,8 @@ namespace GamePlatform2D
             enemies = new EntityManager();
             //layer = new Layers();
             map = new Map();
-            player.LoadContent("Player", content, "Load/Player.ma", "", input);
-            enemies.LoadContent("Enemy", content, "Load/Enemy.ma", "Level1", input);
+            player.LoadContent("Player", content, "Load/Entity/Player.ma", "", input);
+            enemies.LoadContent("Enemy", content, "Load/Entity/Enemy.ma", "Level1", input);
             map.LoadContent(content, map, "Map1");
         }
 

@@ -9,13 +9,13 @@ namespace GamePlatform2D
     public abstract class Entity
     {
         #region Variables
-        protected int health, range;
+        protected int health, range, direction;
         protected Animation moveAnimation;
         protected SpriteSheetAnimation ssAnimation;
         protected float moveSpeed, gravity, jumpSpeed;
         protected ContentManager content;
         protected Texture2D image;
-        protected Vector2 position, velocity, prevPosition;
+        protected Vector2 position, velocity, prevPosition, origPosition, destPosition;
         protected bool activateGravity, syncTilePosition, onTile;
 
         protected List<List<string>> attributes, contents;
@@ -27,6 +27,15 @@ namespace GamePlatform2D
             get { return prevPosition; }
         }
 
+        public int Direction
+        {
+            get { return direction; }
+            set
+            {
+                direction = value;
+                destPosition.X = (direction == 2) ? destPosition.X = origPosition.X - range : destPosition.X = origPosition.X + range;
+            }
+        }
         public bool OnTile
         {
             get { return onTile; }
@@ -122,7 +131,9 @@ namespace GamePlatform2D
 
         public virtual void Update(GameTime gameTime, InputManager input, Collision col, Layer layer)
         {
-
+            syncTilePosition = false;
+            prevPosition = position;
+            moveAnimation.IsActive = true;
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)

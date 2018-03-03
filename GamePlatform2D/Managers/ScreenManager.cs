@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GamePlatform2D
 {
+    
     public class ScreenManager
     {
         private static ScreenManager instance;
@@ -72,8 +73,7 @@ namespace GamePlatform2D
             fade.ActivateValue = 1.0f;
             this.inputManager = inputManager;
 
-            if (alpha != 1.0f)
-                fade.Alpha = 1.0f - alpha;
+            if (alpha != 1.0f) fade.Alpha = 1.0f - alpha;
             else fade.Alpha = alpha;
 
             fade.Increase = true;

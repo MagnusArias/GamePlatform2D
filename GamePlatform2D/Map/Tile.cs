@@ -134,9 +134,16 @@ namespace GamePlatform2D
                     e.Velocity = new Vector2(e.Velocity.X, 0);
                     e.ActivateGravity = true;
                 }
-                else
+                else if (e.Rect.Right >= rect.Left && preve.Right <= prevTile.Left)
                 {
-                    e.Position -= e.Velocity;
+                    e.Position = new Vector2(position.X - e.Animation.FrameWidth, e.Position.Y);
+                    e.Direction = (e.Direction == 1) ? e.Direction = 2 : e.Direction = 1;
+                }
+                else if (e.Rect.Left <= rect.Right && preve.Left >= prevTile.Right)
+                {
+                    e.Position = new Vector2(position.X + Layer.TileDimensions.X, e.Position.Y);
+                    e.Direction = (e.Direction == 1) ? e.Direction = 2 : e.Direction = 1;
+
                 }
             }
             e.Animation.Position = e.Position;

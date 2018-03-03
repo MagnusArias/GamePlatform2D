@@ -12,14 +12,9 @@ namespace GamePlatform2D
 {
     public class Enemy : Entity
     {
-
-        int rangeCounter, direction;
-        Vector2 destPosition, origPosition;
-
         public override void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input)
         {
             base.LoadContent(content, attributes, contents, input);
-            rangeCounter = 0;
             direction = 1;
 
             origPosition = position;
@@ -36,7 +31,7 @@ namespace GamePlatform2D
 
         public override void Update(GameTime gameTime, InputManager input, Collision col, Layer layer)
         {
-            moveAnimation.IsActive= true;
+            base.Update(gameTime, input, col, layer);
 
             if (direction == 1)
             {

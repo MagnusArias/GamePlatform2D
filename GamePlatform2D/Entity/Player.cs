@@ -21,9 +21,8 @@ namespace GamePlatform2D
 
         public override void Update(GameTime gameTime, InputManager input, Collision col, Layer layer)
         {
-            syncTilePosition = false;
-            prevPosition = position;
-            moveAnimation.IsActive = true;
+            base.Update(gameTime, input, col, layer);
+
             if (input.KeyDown(Keys.Right, Keys.D))
             {
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 2);

@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Managers\EntityManager.cs" />
-    <Compile Include="FloatRect.cs" />
+    <Compile Include="Entity\FloatRect.cs" />
     <Compile Include="Map\Layer.cs" />
     <Compile Include="Map\Collision.cs" />
     <Compile Include="Entity\Enemy.cs" />
@@ -86,7 +86,7 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
-    <None Include="Load\Enemy.ma">
+    <None Include="Load\Entity\Enemy.ma">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Load\Maps\Map1.mma">
@@ -95,7 +95,7 @@
     <None Include="Load\Menus.ma">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Load\Player.ma">
+    <None Include="Load\Entity\Player.ma">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Load\Splash.ma">
