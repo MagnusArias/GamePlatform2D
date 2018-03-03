@@ -47,13 +47,13 @@ namespace GamePlatform2D
             attributes = new List<List<string>>();
             contents = new List<List<string>>();
 
-            fileManager.LoadContent("Load/Maps/" + mapID + ".mma", attributes, contents, "Layers");
+            fileManager.LoadContent("Load/Maps/" + mapID + ".mma", "Layers");
 
-            for (int i = 0; i < attributes.Count; i++)
+            for (int i = 0; i < fileManager.Attributes.Count; i++)
             {
-                for (int j = 0; j < attributes[i].Count; j++)
+                for (int j = 0; j < fileManager.Attributes[i].Count; j++)
                 {
-                    switch (attributes[i][j])
+                    switch (fileManager.Attributes[i][j])
                     {
                         case "TileSet":
                             tileSet = this.content.Load<Texture2D>("TileSets/" + contents[i][j]);

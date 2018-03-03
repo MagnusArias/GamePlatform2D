@@ -48,12 +48,12 @@ namespace GamePlatform2D
             position = Vector2.Zero;
             itemNumber = 0;
 
-            fileManager.LoadContent("Load/Menus.ma", attributes, contents, id);
-            for (int i = 0; i < attributes.Count; i++)
+            fileManager.LoadContent("Load/Menus.ma", id);
+            for (int i = 0; i < fileManager.Attributes.Count; i++)
             {
-                for (int n = 0; n < attributes[i].Count; n++)
+                for (int n = 0; n < fileManager.Attributes[i].Count; n++)
                 {
-                    switch (attributes[i][n])
+                    switch (fileManager.Attributes[i][n])
                     {
                         case "Item":
                             menuItems.Add(contents[i][n]);

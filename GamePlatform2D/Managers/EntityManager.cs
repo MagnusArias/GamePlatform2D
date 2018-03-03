@@ -13,7 +13,6 @@ namespace GamePlatform2D
     public class EntityManager
     {
         List<Entity> entities;
-        List<List<string>> attributes, contents;
         FileManager fileManager;
         InputManager input;
 
@@ -23,21 +22,19 @@ namespace GamePlatform2D
         public void LoadContent(string entityType, ContentManager content, string filename, string identifier, InputManager input)
         {
             entities = new List<Entity>();
-            attributes = new List<List<string>>();
-            contents = new List<List<string>>();
             fileManager = new FileManager();
             this.input = input;
 
             if (identifier == String.Empty)
-                fileManager.LoadContent(filename, attributes, contents);
+                fileManager.LoadContent(filename);
             else
-                fileManager.LoadContent(filename, attributes, contents, identifier);
+                fileManager.LoadContent(filename, identifier);
 
-            for (int i = 0; i < attributes.Count; i++)
+            for (int i = 0; i < fileManager.Attributes.Count; i++)
             {
                 Type newClass = Type.GetType("GamePlatform2D." + entityType);
                 entities.Add((Entity)Activator.CreateInstance(newClass));
-                entities[i].LoadContent(content, attributes[i], contents[i], this.input);
+                entities[i].LoadContent(content, fileManager.Attributes[i], fileManager.Contents[i], this.input);
             }
         }
 
@@ -51,6 +48,20 @@ namespace GamePlatform2D
         {
             for (int i = 0; i < entities.Count; i++)
                 entities[i].Update(gameTime, input, map.collision, map.layer);
+        }
+
+        public void EntityColision(EntityManager E2)
+        {
+            foreach (Entity e in entities)
+            {
+                foreach (Entity e2 in E2.Entities)
+                {
+                    if (e.Rect.Intersects(e2.Rect))
+                    {
+                        e.OnCollision(e2);
+                    }
+                }
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)

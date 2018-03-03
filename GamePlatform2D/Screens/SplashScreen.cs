@@ -35,12 +35,12 @@ namespace GamePlatform2D
             images = new List<Texture2D>();
             fadeAnimation = new FadeAnimation();
 
-            fileManager.LoadContent("Load/Splash.ma", attributes, contents);
-            for (int i = 0; i < attributes.Count; i++)
+            fileManager.LoadContent("Load/Splash.ma");
+            for (int i = 0; i < fileManager.Attributes.Count; i++)
             {
-                for (int n = 0; n < attributes[i].Count; n++)
+                for (int n = 0; n < fileManager.Attributes[i].Count; n++)
                 {
-                    switch (attributes[i][n])
+                    switch (fileManager.Attributes[i][n])
                     {
                         case "Image":
                             images.Add(this.content.Load<Texture2D>(contents[i][n]));

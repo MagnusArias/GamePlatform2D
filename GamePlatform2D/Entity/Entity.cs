@@ -129,6 +129,11 @@ namespace GamePlatform2D
             content.Unload();
         }
 
+        public virtual void OnCollision(Entity e)
+        {
+
+        }
+
         public virtual void Update(GameTime gameTime, InputManager input, Collision col, Layer layer)
         {
             syncTilePosition = false;

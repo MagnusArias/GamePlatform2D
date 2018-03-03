@@ -13,16 +13,33 @@ namespace GamePlatform2D
         List<string> tempAttributes;
         List<string> tempContents;
 
+        List<List<string>> attributes, contents;
+
         bool identifierFound = false;
 
         #endregion
 
         #region Properties
-
+        public List<List<string>> Attributes
+        {
+            get { return attributes; }
+            set { attributes = value; }
+        }
+        public List<List<string>> Contents
+        {
+            get { return contents; }
+            set { contents = value; }
+        }
         #endregion
 
+        public FileManager()
+        {
+            attributes = new List<List<string>>();
+            contents = new List<List<string>>();
+        }
+
         #region Public Methods
-        public void LoadContent(string filename, List<List<string>> attributes, List<List<string>> contents)
+        public void LoadContent(string filename)
         {
             using (StreamReader reader = new StreamReader(filename))
             {
@@ -63,7 +80,7 @@ namespace GamePlatform2D
 
         }
 
-        public void LoadContent(string filename, List<List<string>> attributes, List<List<string>> contents, string identifier)
+        public void LoadContent(string filename, string identifier)
         {
             using (StreamReader reader = new StreamReader(filename))
             {

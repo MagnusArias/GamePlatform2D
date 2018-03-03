@@ -12,12 +12,12 @@ namespace GamePlatform2D
 {
     public class Layer
     {
-        List<List<Tile>> tiles;
-        List<List<string>> attributes, contents;
+        List<Tile> tiles;
         List<string> motion, solid;
         FileManager fileManager;
         ContentManager content;
         Texture2D tileSheet;
+        string nullTile;
 
         public static Vector2 TileDimensions
         {
@@ -26,73 +26,76 @@ namespace GamePlatform2D
 
         public void LoadContent(Map map, string layerID)
         {
-            tiles = new List<List<Tile>>();
-            attributes = new List<List<string>>();
-            contents = new List<List<string>>();
+            tiles = new List<Tile>();
             motion = new List<string>();
             solid = new List<string>();
 
             fileManager = new FileManager();
             content = new ContentManager(ScreenManager.Instance.Content.ServiceProvider, "Content");
 
-            fileManager.LoadContent("Load/Maps/" + map.ID + ".mma", attributes, contents, layerID);
+            fileManager.LoadContent("Load/Maps/" + map.ID + ".mma", layerID);
 
             int indexY = 0;
 
-            for (int i = 0; i < attributes.Count; i++)
+            for (int i = 0; i < fileManager.Attributes.Count; i++)
             {
-                for (int j = 0; j < attributes[i].Count; j++)
+                for (int j = 0; j < fileManager.Attributes[i].Count; j++)
                 {
-                    switch (attributes[i][j])
+                    switch (fileManager.Attributes[i][j])
                     {
                         case "TileSet":
-                            tileSheet = content.Load<Texture2D>("TileSets/" + contents[i][j]);
+                            tileSheet = content.Load<Texture2D>("TileSets/" + fileManager.Contents[i][j]);
                             break;
 
                         case "Solid":
-                            solid.Add(contents[i][j]);
+                            solid.Add(fileManager.Contents[i][j]);
+                            break;
+
+                        case "NullTile":
+                            nullTile = fileManager.Contents[i][j];
                             break;
 
                         case "Motion":
-                            motion.Add(contents[i][j]);
+                            motion.Add(fileManager.Contents[i][j]);
                             break;
 
                         case "StartLayer":
-                            List<Tile> tempTiles = new List<Tile>();
+
                             Tile.Motion tempMotion = Tile.Motion.Static;
                             Tile.State tempState;
 
-                            for (int k = 0; k < contents[i].Count; k++)
+                            for (int k = 0; k < fileManager.Contents[i].Count; k++)
                             {
-                                string[] split = contents[i][k].Split(',');
-                                tempTiles.Add(new Tile());
-
-                                if (solid.Contains(contents[i][k]))
-                                    tempState = Tile.State.Solid;
-                                else
-                                    tempState = Tile.State.Passive;
-
-                                foreach (string m in motion)
+                                if (fileManager.Contents[i][k] != nullTile)
                                 {
-                                    string[] getMotion = m.Split(':');
+                                    string[] split = fileManager.Contents[i][k].Split(',');
+                                    tiles.Add(new Tile());
 
-                                    if (getMotion[0] == contents[i][k])
+                                    if (solid.Contains(fileManager.Contents[i][k]))
+                                        tempState = Tile.State.Solid;
+                                    else
+                                        tempState = Tile.State.Passive;
+
+                                    foreach (string m in motion)
                                     {
-                                        tempMotion = (Tile.Motion)Enum.Parse(typeof(Tile.Motion), getMotion[1]);
-                                    }
-                                }
+                                        string[] getMotion = m.Split(':');
 
-                                tempTiles[k].SetTile(tempState, tempMotion, new Vector2(k * 32, indexY * 32), tileSheet,
-                                    new Rectangle(int.Parse(split[0]) * 32, int.Parse(split[1]) * 32, 32, 32));
+                                        if (getMotion[0] == fileManager.Contents[i][k])
+                                        {
+                                            tempMotion = (Tile.Motion)Enum.Parse(typeof(Tile.Motion), getMotion[1]);
+                                        }
+                                    }
+
+                                    tiles[tiles.Count - 1].SetTile(tempState, tempMotion, new Vector2(k * 32, indexY * 32), tileSheet,
+                                        new Rectangle(int.Parse(split[0]) * 32, int.Parse(split[1]) * 32, 32, 32));
+                                }
                             }
-                            tiles.Add(tempTiles);
                             indexY++;
                             break;
 
                         case "EndLayer":
 
                             break;
-
                     }
                 }
             }
@@ -102,10 +105,7 @@ namespace GamePlatform2D
         {
             for (int i = 0; i < tiles.Count; i++)
             {
-                for (int j = 0; j < tiles[i].Count; j++)
-                {
-                    tiles[i][j].Update(gameTime);
-                }
+                tiles[i].Update(gameTime);
             }
         }
 
@@ -113,20 +113,14 @@ namespace GamePlatform2D
         {
             for (int i = 0; i < tiles.Count; i++)
             {
-                for (int j = 0; j < tiles[i].Count; j++)
-                {
-                    tiles[i][j].UpdateCollision(ref e);
-                }
+                tiles[i].UpdateCollision(ref e);
             }
         }
         public void Draw(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < tiles.Count; i++)
             {
-                for (int j = 0; j < tiles[i].Count; j++)
-                {
-                    tiles[i][j].Draw(spriteBatch);
-                }
+                tiles[i].Draw(spriteBatch);
             }
         }
     }

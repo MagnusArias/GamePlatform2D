@@ -13,7 +13,7 @@ namespace GamePlatform2D
     public class Collision
     {
         FileManager fileManager;
-        List<List<string>> attributes, contents, collisionMap;
+        List<List<string>> collisionMap;
         List<string> row;
         public List<List<string>> CollisionMap
         {
@@ -22,17 +22,15 @@ namespace GamePlatform2D
         public void LoadContent(ContentManager content, string mapID)
         {
             fileManager = new FileManager();
-            attributes = new List<List<string>>();
-            contents = new List<List<string>>();
             collisionMap = new List<List<string>>();
             row = new List<string>();
 
-            fileManager.LoadContent("Load/Maps/" + mapID + ".mma", attributes, contents, "Collision");
-            for (int i= 0; i < contents.Count; i++)
+            fileManager.LoadContent("Load/Maps/" + mapID + ".mma", "Collision");
+            for (int i= 0; i < fileManager.Contents.Count; i++)
             { 
-                for (int j = 0; j < contents[i].Count; j++)
+                for (int j = 0; j < fileManager.Contents[i].Count; j++)
                 {
-                    row.Add(contents[i][j]);
+                    row.Add(fileManager.Contents[i][j]);
                 }
                 collisionMap.Add(row);
                 row = new List<string>();

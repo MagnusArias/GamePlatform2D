@@ -10,7 +10,6 @@ namespace GamePlatform2D
     {
         #region Variables
         EntityManager player, enemies;
-        //Layers layer;
         Map map;
         #endregion
 
@@ -24,7 +23,6 @@ namespace GamePlatform2D
             base.LoadContent(content, input);
             player = new EntityManager();
             enemies = new EntityManager();
-            //layer = new Layers();
             map = new Map();
             player.LoadContent("Player", content, "Load/Entity/Player.ma", "", input);
             enemies.LoadContent("Enemy", content, "Load/Entity/Enemy.ma", "Level1", input);
@@ -47,6 +45,7 @@ namespace GamePlatform2D
             map.Update(gameTime);
 
             Entity e;
+
             for (int i = 0; i < player.Entities.Count; i++)
             {
                 e = player.Entities[i];
@@ -60,6 +59,8 @@ namespace GamePlatform2D
                 map.UpdateCollision(ref e);
                 enemies.Entities[i] = e;
             }
+
+            player.EntityColision(enemies);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

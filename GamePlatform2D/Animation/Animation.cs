@@ -16,7 +16,7 @@ namespace GamePlatform2D
         private Texture2D image;
         private string text;
         private SpriteFont font;
-        private Color color;
+        private Color color, drawColor;
         private Rectangle sourceRect;
         private float rotation, scale, alpha;
         private Vector2 origin, position, frames, currentFrame;
@@ -27,6 +27,10 @@ namespace GamePlatform2D
 
         #region Properties
 
+        public Color DrawColor
+        {
+            set { drawColor = value; }
+        }
         public Vector2 Position
         {
             set { position = value; }
@@ -108,6 +112,8 @@ namespace GamePlatform2D
             scale = 1.0f;
             alpha = 1.0f;
             isActive = false;
+            drawColor = Color.White;
+
             currentFrame = new Vector2(0, 0);
             if (image != null && frames != Vector2.Zero)
                 sourceRect = new Rectangle((int)currentFrame.X * FrameWidth, (int)currentFrame.Y * FrameHeight, FrameWidth, FrameHeight);
@@ -134,7 +140,7 @@ namespace GamePlatform2D
             if (image != null)
             {
                 origin = new Vector2(sourceRect.Width / 2, sourceRect.Height / 2);
-                spriteBatch.Draw(image, position + origin, sourceRect, Color.White * alpha, rotation, origin, scale, SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(image, position + origin, sourceRect, drawColor * alpha, rotation, origin, scale, SpriteEffects.None, 0.0f);
             }
 
             if (text != String.Empty)

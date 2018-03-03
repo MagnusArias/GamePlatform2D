@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace GamePlatform2D
 {
@@ -22,6 +23,8 @@ namespace GamePlatform2D
         public override void Update(GameTime gameTime, InputManager input, Collision col, Layer layer)
         {
             base.Update(gameTime, input, col, layer);
+
+            moveAnimation.DrawColor = Color.White;
 
             if (input.KeyDown(Keys.Right, Keys.D))
             {
@@ -56,6 +59,16 @@ namespace GamePlatform2D
             ssAnimation.Update(gameTime, ref moveAnimation);
         }
 
+        public override void OnCollision(Entity e)
+        {
+            Type type = e.GetType();
+            if (type == typeof(Enemy))
+            {
+                health--;
+                moveAnimation.DrawColor = Color.Red;
+            }
+
+        }
         public override void Draw(SpriteBatch spriteBatch)
         {
             moveAnimation.Draw(spriteBatch);
