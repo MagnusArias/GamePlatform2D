@@ -1,4 +1,4 @@
-﻿Load=[MapProperties]
+Load=[MapProperties]
 
 Load=[TileDimensions]
 [32,32]
@@ -37,3 +37,6 @@ Load=[EndLayer]
 [dummy]
 
 EndLoad=[Layer1]
+
+Load=[PlayerPosition]
+[20,20]

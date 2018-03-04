@@ -35,7 +35,7 @@ namespace GamePlatform2D
             images = new List<Texture2D>();
             fadeAnimation = new FadeAnimation();
 
-            fileManager.LoadContent("Load/Splash.ma");
+            fileManager.LoadContent("Load/Splash.ma", "");
             for (int i = 0; i < fileManager.Attributes.Count; i++)
             {
                 for (int n = 0; n < fileManager.Attributes[i].Count; n++)
@@ -43,7 +43,7 @@ namespace GamePlatform2D
                     switch (fileManager.Attributes[i][n])
                     {
                         case "Image":
-                            images.Add(this.content.Load<Texture2D>(contents[i][n]));
+                            images.Add(this.content.Load<Texture2D>(fileManager.Contents[i][n]));
                             animation.Add(new FadeAnimation());
                             break;
 
@@ -58,6 +58,10 @@ namespace GamePlatform2D
                 animation[i].Scale = 2.0f;
                 animation[i].IsActive = true;
             }
+
+            string[] sAttribute = { "Attribute1" };
+            string[] sContent = { "Content1", "Content2" };
+            fileManager.SaveContent("Load/Splash.ma", sAttribute, sContent, "");
         }
 
         public override void UnloadContent()

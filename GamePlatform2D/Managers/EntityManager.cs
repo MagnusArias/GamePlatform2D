@@ -26,7 +26,7 @@ namespace GamePlatform2D
             this.input = input;
 
             if (identifier == String.Empty)
-                fileManager.LoadContent(filename);
+                fileManager.LoadContent(filename, "");
             else
                 fileManager.LoadContent(filename, identifier);
 

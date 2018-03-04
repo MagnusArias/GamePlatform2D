@@ -9,9 +9,16 @@ namespace GamePlatform2D
 {
     public class Player : Entity
     {
+
+        FileManager fileManager;
         public override void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input)
         {
             base.LoadContent(content, attributes, contents, input);
+            string[] saveAttribute = { "PlayerPosition" };
+            string[] saveContent = { position.X.ToString() + ',' + position.Y.ToString() };
+
+            fileManager = new FileManager();
+            fileManager.SaveContent("Load/Maps/Map1.mma", saveAttribute, saveContent, "");
         }
 
         public override void UnloadContent()
@@ -65,7 +72,23 @@ namespace GamePlatform2D
             if (type == typeof(Enemy))
             {
                 health--;
-                moveAnimation.DrawColor = Color.Red;
+                //moveAnimation.DrawColor = Color.Red;
+
+                fileManager = new FileManager();
+                fileManager.LoadContent("Load/Maps/Map1.mma", "");
+                for (int i = 0; i < fileManager.Attributes.Count; i++)
+                {
+                    for (int j = 0; j < fileManager.Attributes[i].Count; j++)
+                    {
+                        switch (fileManager.Attributes[i][j])
+                            {
+                            case "PlayerPosition":
+                                string[] split = fileManager.Contents[i][j].Split(',');
+                                position = new Vector2(int.Parse(split[0]), int.Parse(split[1]));
+                                break;
+                        }
+                    }
+                }
             }
 
         }

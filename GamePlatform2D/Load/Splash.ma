@@ -1,4 +1,4 @@
-﻿Load=[Image]
+Load=[Image]
 [Splash/image1]
 [Splash/image2]
 [Splash/image3]
