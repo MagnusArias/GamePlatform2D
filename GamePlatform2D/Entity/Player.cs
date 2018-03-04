@@ -64,6 +64,8 @@ namespace GamePlatform2D
 
             moveAnimation.Position = position;
             ssAnimation.Update(gameTime, ref moveAnimation);
+
+            Camera.Instance.SetFocalPoint(new Vector2(position.X, position.Y));
         }
 
         public override void OnCollision(Entity e)
@@ -72,7 +74,7 @@ namespace GamePlatform2D
             if (type == typeof(Enemy))
             {
                 health--;
-                //moveAnimation.DrawColor = Color.Red;
+                moveAnimation.DrawColor = Color.Red;
 
                 fileManager = new FileManager();
                 fileManager.LoadContent("Load/Maps/Map1.mma", "");

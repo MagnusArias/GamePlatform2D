@@ -100,6 +100,8 @@ namespace GamePlatform2D
         {
             if (!transition) currentScreen.Update(gameTime);
             else Transition(gameTime);
+
+            Camera.Instance.Update();
         }
 
         public void Draw(SpriteBatch spriteBatch)

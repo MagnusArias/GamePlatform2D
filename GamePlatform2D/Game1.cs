@@ -80,7 +80,14 @@ namespace GamePlatform2D
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(
+                SpriteSortMode.Immediate,
+                BlendState.AlphaBlend,
+                null,
+                null,
+                null,
+                null,
+                Camera.Instance.ViewMatrix);
             // TODO: Add your drawing code here
             ScreenManager.Instance.Draw(spriteBatch);
             spriteBatch.End();
