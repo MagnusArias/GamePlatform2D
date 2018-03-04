@@ -9,8 +9,11 @@ namespace GamePlatform2D
 {
     public class Player : Entity
     {
-
         FileManager fileManager;
+        List<Vector2> bullets;
+        float bulletSpeed = 400f;
+        Texture2D bulletImage;
+
         public override void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input)
         {
             base.LoadContent(content, attributes, contents, input);
@@ -19,6 +22,9 @@ namespace GamePlatform2D
 
             fileManager = new FileManager();
             fileManager.SaveContent("Load/Maps/Map1.mma", saveAttribute, saveContent, "");
+
+            bullets = new List<Vector2>();
+            bulletImage = content.Load<Texture2D>("bullet");
         }
 
         public override void UnloadContent()
@@ -60,6 +66,18 @@ namespace GamePlatform2D
             else
                 velocity.Y = 0;
 
+            if (input.KeyDown(Keys.Z))
+            {
+                bullets.Add(position);
+
+            }
+
+            for (int i = 0; i < bullets.Count; i++)
+            {
+                float x = bullets[i].X;
+                x += bulletSpeed *(float)gameTime.ElapsedGameTime.TotalSeconds;
+                bullets[i] = new Vector2(x, bullets[i].Y);
+            }
             position += velocity;
 
             moveAnimation.Position = position;
@@ -83,7 +101,7 @@ namespace GamePlatform2D
                     for (int j = 0; j < fileManager.Attributes[i].Count; j++)
                     {
                         switch (fileManager.Attributes[i][j])
-                            {
+                        {
                             case "PlayerPosition":
                                 string[] split = fileManager.Contents[i][j].Split(',');
                                 position = new Vector2(int.Parse(split[0]), int.Parse(split[1]));
@@ -97,6 +115,10 @@ namespace GamePlatform2D
         public override void Draw(SpriteBatch spriteBatch)
         {
             moveAnimation.Draw(spriteBatch);
+            for (int i = 0; i < bullets.Count; i++)
+            {
+                spriteBatch.Draw(bulletImage, bullets[i], Color.White);
+            }
         }
     }
 }
