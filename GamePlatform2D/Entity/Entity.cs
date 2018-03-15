@@ -18,6 +18,40 @@ namespace GamePlatform2D
         protected Vector2 position, velocity, prevPosition, origPosition, destPosition;
         protected bool activateGravity, syncTilePosition, onTile;
 
+        private struct Speeds
+        {
+            private float move;
+            private float max;
+            private float stop;
+            private float fall;
+            private float maxFall;
+            private float jump;
+            private float stopJump;
+
+        }
+
+        private struct States
+        {
+            private bool left;
+            private bool right;
+            private bool up;
+            private bool squat;
+            private bool jumping;
+            private bool falling;
+        }
+        
+        private struct Moves
+        {
+            private bool highAttack;
+            private bool normalAttack;
+            private bool lowAttack;
+            private bool doubleJump;
+            private bool teleporting;
+            private bool dashing;
+            private bool knockback;
+            private bool flinching;
+        }
+
         protected List<List<string>> attributes, contents;
         #endregion
 
@@ -115,7 +149,7 @@ namespace GamePlatform2D
                 }
             }
 
-            jumpSpeed = 500.0f;
+           // jumpSpeed = 300.0f;
             gravity = 10.0f;
             velocity = Vector2.Zero;
             syncTilePosition = false;

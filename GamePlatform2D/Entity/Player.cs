@@ -12,6 +12,7 @@ namespace GamePlatform2D
         FileManager fileManager;
         List<Vector2> bullets;
         float bulletSpeed = 400f;
+        
         Texture2D bulletImage;
 
         public override void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input)
@@ -25,6 +26,8 @@ namespace GamePlatform2D
 
             bullets = new List<Vector2>();
             bulletImage = content.Load<Texture2D>("bullet");
+
+            jumpSpeed = 300.0f;
         }
 
         public override void UnloadContent()
@@ -42,12 +45,12 @@ namespace GamePlatform2D
             if (input.KeyDown(Keys.Right, Keys.D))
             {
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 2);
-                velocity.X = moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                velocity.X = moveSpeed* (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
             else if (input.KeyDown(Keys.Left, Keys.A))
             {
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 1);
-                velocity.X = -moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                velocity.X = -moveSpeed* (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
             else
             {
@@ -57,12 +60,12 @@ namespace GamePlatform2D
 
             if (input.KeyDown(Keys.Up, Keys.W) && !activateGravity)
             {
-                velocity.Y = -jumpSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                velocity.Y = -jumpSpeed* (float)gameTime.ElapsedGameTime.TotalSeconds;
                 activateGravity = true;
             }
 
             if (activateGravity)
-                velocity.Y += gravity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                velocity.Y += gravity* (float)gameTime.ElapsedGameTime.TotalSeconds;
             else
                 velocity.Y = 0;
 
