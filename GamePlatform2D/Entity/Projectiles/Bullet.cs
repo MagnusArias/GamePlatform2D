@@ -37,7 +37,6 @@ namespace GamePlatform2D
             bulletSpeed = speed;
             animation = new Animation();
             image = img;
-            //animation.LoadContent(content, image, "", position);
         }
 
         public void LoadContent(ContentManager content, List<string> attributes, List<string> contents)
@@ -46,9 +45,6 @@ namespace GamePlatform2D
 
         public void Update(GameTime gameTime)
         {
-            //float x = bullets[i].X;
-            // x += bulletSpeed *(float)gameTime.ElapsedGameTime.TotalSeconds;
-            // bullets[i] = new Vector2(x, bullets[i].Y);
             float x = position.X;
             x += bulletSpeed * direction * (float)gameTime.ElapsedGameTime.TotalSeconds;
             position = new Vector2(x, position.Y);

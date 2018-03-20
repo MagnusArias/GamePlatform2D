@@ -14,9 +14,10 @@ namespace GamePlatform2D
         ContentManager content;
         GameScreen currentScreen;
         GameScreen newScreen;
+       
       
         Stack<GameScreen> screenStack = new Stack<GameScreen>();
-        Vector2 dimensions;
+        Vector2 dimensions, scale;
         bool transition;
         Animation animation = new Animation();
         FadeAnimation fade = new FadeAnimation();
@@ -33,6 +34,12 @@ namespace GamePlatform2D
                 if (instance == null) instance = new ScreenManager();
                 return instance;
             }
+        }
+
+        public Vector2 Scale
+        {
+            get { return scale; }
+            set { scale = value; }
         }
 
         public Vector2 Dimensions

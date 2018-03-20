@@ -18,38 +18,38 @@ namespace GamePlatform2D
         protected Vector2 position, velocity, prevPosition, origPosition, destPosition;
         protected bool activateGravity, syncTilePosition, onTile;
 
-        private struct Speeds
+        public struct Speeds
         {
-            private float move;
-            private float max;
-            private float stop;
-            private float fall;
-            private float maxFall;
-            private float jump;
-            private float stopJump;
+            public float move;
+            public float max;
+            public float stop;
+            public float fall;
+            public float maxFall;
+            public float jump;
+            public float stopJump;
 
         }
 
-        private struct States
+        public struct States
         {
-            private bool left;
-            private bool right;
-            private bool up;
-            private bool squat;
-            private bool jumping;
-            private bool falling;
+            public bool left;
+            public bool right;
+            public bool up;
+            public bool squat;
+            public bool jumping;
+            public bool falling;
         }
         
-        private struct Moves
+        public struct Moves
         {
-            private bool highAttack;
-            private bool normalAttack;
-            private bool lowAttack;
-            private bool doubleJump;
-            private bool teleporting;
-            private bool dashing;
-            private bool knockback;
-            private bool flinching;
+            public bool highAttack;
+            public bool normalAttack;
+            public bool lowAttack;
+            public bool doubleJump;
+            public bool teleporting;
+            public bool dashing;
+            public bool knockback;
+            public bool flinching;
         }
 
         protected List<List<string>> attributes, contents;
@@ -60,6 +60,7 @@ namespace GamePlatform2D
         {
             get { return prevPosition; }
         }
+
 
         public int Direction
         {

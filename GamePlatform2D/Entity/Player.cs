@@ -12,6 +12,9 @@ namespace GamePlatform2D
         FileManager fileManager;
         List<Bullet> bullets;        
         Texture2D bulletImage;
+        States localState;
+        Moves localMoves;
+        Speeds localSpeeds;
 
         public override void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input)
         {
@@ -44,13 +47,16 @@ namespace GamePlatform2D
             {
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 2);
                 velocity.X = moveSpeed* (float)gameTime.ElapsedGameTime.TotalSeconds;
-                direction = 1;
+                localState.left = false;
+                localState.right = true;
+                
             }
             else if (input.KeyDown(Keys.Left, Keys.A))
             {
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 1);
                 velocity.X = -moveSpeed* (float)gameTime.ElapsedGameTime.TotalSeconds;
-                direction = -1;
+                localState.right = false;
+                localState.left = true;
             }
             else
             {
@@ -61,17 +67,25 @@ namespace GamePlatform2D
             if (input.KeyDown(Keys.Up, Keys.W) && !activateGravity)
             {
                 velocity.Y = -jumpSpeed* (float)gameTime.ElapsedGameTime.TotalSeconds;
+                localState.jumping = true;
                 activateGravity = true;
             }
+
+            if (input.KeyDown(Keys.Down, Keys.S))
+            {
+                localState.squat = true;
+                //moveAnimation.Scale()
+            }
+            else localState.squat = false;
 
             if (activateGravity)
                 velocity.Y += gravity* (float)gameTime.ElapsedGameTime.TotalSeconds;
             else
                 velocity.Y = 0;
 
-            if (input.KeyDown(Keys.Z))
+            if (input.KeyDown(Keys.Z) && CheckDirection(localState)!= 0)
             {
-                bullets.Add(new Bullet(new Vector2(position.X, position.Y), direction, 400.0f, bulletImage));
+                bullets.Add(new Bullet(new Vector2(position.X + moveAnimation.FrameWidth/2, position.Y + moveAnimation.FrameHeight/2), CheckDirection(localState), 400.0f, bulletImage));
             }
 
             foreach (Bullet b in bullets) b.Update(gameTime);
@@ -108,17 +122,23 @@ namespace GamePlatform2D
                     }
                 }
             }
-
         }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
+            foreach (Bullet b in bullets) b.Draw(spriteBatch);
             moveAnimation.Draw(spriteBatch);
-            
-            for (int i = 0; i < bullets.Count; i++)
-            {
-                bullets[i].Draw(spriteBatch);
-            }
-            
+        }
+
+
+        private int CheckDirection(States states)
+        {
+            int dir;
+            if (states.right && !states.left) dir = 1;
+            else if (states.left && !states.right) dir = -1;
+            else dir = 0;
+
+            return dir;
         }
     }
 }

@@ -28,11 +28,13 @@ namespace GamePlatform2D
         {
             // TODO: Add your initialization logic here
             ScreenManager.Instance.Initialize();
-            ScreenManager.Instance.Dimensions = new Vector2(640, 480);
+            ScreenManager.Instance.Dimensions = new Vector2(1024, 768);
             graphics.PreferredBackBufferWidth = (int)ScreenManager.Instance.Dimensions.X;
             graphics.PreferredBackBufferHeight = (int)ScreenManager.Instance.Dimensions.Y;
             graphics.ApplyChanges();
-
+            ScreenManager.Instance.Scale = new Vector2(
+                (float)ScreenManager.Instance.Dimensions.X / 640.0f,
+                (float)ScreenManager.Instance.Dimensions.Y / 480.0f);
             base.Initialize();
         }
 
@@ -45,7 +47,7 @@ namespace GamePlatform2D
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             ScreenManager.Instance.LoadContent(Content);
-            // TODO: use this.Content to load your game content here
+ // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -81,13 +83,13 @@ namespace GamePlatform2D
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin(
-                SpriteSortMode.Immediate,
-                BlendState.AlphaBlend,
-                null,
-                null,
-                null,
-                null,
-                Camera.Instance.ViewMatrix);
+                sortMode: SpriteSortMode.Immediate,
+                blendState: BlendState.AlphaBlend,
+                samplerState: null,
+                depthStencilState: null,
+                rasterizerState: null,
+                effect: null,
+                transformMatrix: Camera.Instance.ViewMatrix);
             // TODO: Add your drawing code here
             ScreenManager.Instance.Draw(spriteBatch);
             spriteBatch.End();
