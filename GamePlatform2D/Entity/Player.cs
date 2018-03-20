@@ -10,9 +10,7 @@ namespace GamePlatform2D
     public class Player : Entity
     {
         FileManager fileManager;
-        List<Vector2> bullets;
-        float bulletSpeed = 400f;
-        
+        List<Bullet> bullets;        
         Texture2D bulletImage;
 
         public override void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input)
@@ -24,7 +22,7 @@ namespace GamePlatform2D
             fileManager = new FileManager();
             fileManager.SaveContent("Load/Maps/Map1.mma", saveAttribute, saveContent, "");
 
-            bullets = new List<Vector2>();
+            bullets = new List<Bullet>();
             bulletImage = content.Load<Texture2D>("bullet");
 
             jumpSpeed = 300.0f;
@@ -46,11 +44,13 @@ namespace GamePlatform2D
             {
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 2);
                 velocity.X = moveSpeed* (float)gameTime.ElapsedGameTime.TotalSeconds;
+                direction = 1;
             }
             else if (input.KeyDown(Keys.Left, Keys.A))
             {
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 1);
                 velocity.X = -moveSpeed* (float)gameTime.ElapsedGameTime.TotalSeconds;
+                direction = -1;
             }
             else
             {
@@ -71,16 +71,11 @@ namespace GamePlatform2D
 
             if (input.KeyDown(Keys.Z))
             {
-                bullets.Add(position);
-
+                bullets.Add(new Bullet(new Vector2(position.X, position.Y), direction, 400.0f, bulletImage));
             }
 
-            for (int i = 0; i < bullets.Count; i++)
-            {
-                float x = bullets[i].X;
-                x += bulletSpeed *(float)gameTime.ElapsedGameTime.TotalSeconds;
-                bullets[i] = new Vector2(x, bullets[i].Y);
-            }
+            foreach (Bullet b in bullets) b.Update(gameTime);
+
             position += velocity;
 
             moveAnimation.Position = position;
@@ -118,10 +113,12 @@ namespace GamePlatform2D
         public override void Draw(SpriteBatch spriteBatch)
         {
             moveAnimation.Draw(spriteBatch);
+            
             for (int i = 0; i < bullets.Count; i++)
             {
-                spriteBatch.Draw(bulletImage, bullets[i], Color.White);
+                bullets[i].Draw(spriteBatch);
             }
+            
         }
     }
 }

@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Camera.cs" />
+    <Compile Include="Entity\Projectiles\Bullet.cs" />
     <Compile Include="HudManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Entity\FloatRect.cs" />

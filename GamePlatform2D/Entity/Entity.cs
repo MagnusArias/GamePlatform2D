@@ -149,7 +149,6 @@ namespace GamePlatform2D
                 }
             }
 
-           // jumpSpeed = 300.0f;
             gravity = 10.0f;
             velocity = Vector2.Zero;
             syncTilePosition = false;
