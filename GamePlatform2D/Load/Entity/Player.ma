@@ -1,2 +1,2 @@
 ﻿Load=[Image][Position][Frames][MoveSpeed]
-[player][20 30][3 4][100]
+[player-spritemap][20 30][8 11][100]

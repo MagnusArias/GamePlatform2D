@@ -22,71 +22,120 @@ namespace GamePlatform2D
         private Vector2 origin, position, frames, currentFrame;
         private ContentManager content;
         private bool isActive;
+        protected int numFrames, delay;
 
         #endregion
 
         #region Properties
 
+        /// <summary>
+        /// Kolor do rysowania, domyślnie używany Color.White
+        /// </summary>
         public Color DrawColor
         {
             set { drawColor = value; }
         }
+
+        public int Delay
+        {
+            get { return delay; }
+            set { delay = value; }
+        }
+        /// <summary>
+        /// Pozycja animacji
+        /// </summary>
         public Vector2 Position
         {
             set { position = value; }
             get { return position; }
         }
+        /// <summary>
+        /// Czy animacja jest aktywna, w przypadku 'false' nie jest rysowana ani przewijana
+        /// </summary>
         public bool IsActive
         {
             set { isActive = value; }
             get { return isActive; }
         }
 
-        public virtual float Alpha
+        /// <summary>
+        /// Ilość klatek animacji
+        /// </summary>
+        public int NumFrames
+        {
+            get { return numFrames; }
+            set { numFrames = value; }
+        }
+        /// <summary>
+        /// Przezroczystosc animacji
+        /// </summary>
+        /// 
+       public virtual float Alpha
         {
             get { return alpha; }
             set { alpha = value; }
         }
-
+        /// <summary>
+        /// Skala animacji, jednowymiarowa
+        /// </summary>
         public virtual float Scale
         {
             get { return scale; }
             set { scale = value; }
         }
-
+        /// <summary>
+        /// Czcionka
+        /// </summary>
         public virtual SpriteFont Font
         {
             get { return font; }
             set { font = value; }
         }
+
+        /// <summary>
+        /// Ilość klatek animacji (łączna wartość)
+        /// </summary>
         public Vector2 Frames
         {
             set { frames = value; }
             get { return frames; }
         }
 
+        /// <summary>
+        /// Aktualnie wyświetlana klatka
+        /// </summary>
         public Vector2 CurrentFrame
         {
             set { currentFrame = value; }
             get { return currentFrame; }
         }
-
+        /// <summary>
+        /// Szerokośc klatki
+        /// </summary>
         public int FrameWidth
         {
             get { return image.Width / (int)Frames.X; }
         }
-
+        /// <summary>
+        /// Szerokość klatki
+        /// </summary>
         public int FrameHeight
         {
             get { return image.Height / (int)Frames.Y; }
         }
 
+        /// <summary>
+        /// Klatka źródłowa
+        /// </summary>
         public Rectangle SourceRect
         {
             get { return sourceRect; }
             set { sourceRect = value; }
         }
 
+        /// <summary>
+        /// Grafika, z której korzystamy
+        /// </summary>
         public Texture2D Image
         {
             get { return image; }
@@ -114,6 +163,7 @@ namespace GamePlatform2D
             isActive = false;
             drawColor = Color.White;
 
+            //numFrames = 0;
             currentFrame = new Vector2(0, 0);
             if (image != null && frames != Vector2.Zero)
                 sourceRect = new Rectangle((int)currentFrame.X * FrameWidth, (int)currentFrame.Y * FrameHeight, FrameWidth, FrameHeight);
@@ -135,12 +185,12 @@ namespace GamePlatform2D
 
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, SpriteEffects se)
         {
             if (image != null)
             {
                 origin = new Vector2(sourceRect.Width / 2, sourceRect.Height / 2);
-                spriteBatch.Draw(image, position + origin, sourceRect, drawColor * alpha, rotation, origin, scale, SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(image, position + origin, sourceRect, drawColor * alpha, rotation, origin, scale, se, 0.0f);
             }
 
             if (text != String.Empty)

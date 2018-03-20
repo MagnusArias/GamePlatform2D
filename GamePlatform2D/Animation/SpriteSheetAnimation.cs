@@ -11,41 +11,56 @@ namespace GamePlatform2D
         #region Variables
         int frameCounter, switchFrame;
         Vector2 currentFrame;
+        int count;
         #endregion
 
         #region Properties
-
+        
         #endregion
 
         public SpriteSheetAnimation()
         {
             frameCounter = 0;
-            switchFrame = 100;
+            switchFrame = numFrames;
+            count = 0;
         }
 
         #region Public Methods
 
         public override void Update(GameTime gameTime, ref Animation a)
         {
-            currentFrame = a.CurrentFrame;
-            if (a.IsActive)
+            if (delay == -1) return;
+
+            count++;
+
+            if (count >= delay)
             {
-                frameCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-                if (frameCounter >= switchFrame)
+                count = 0;
+
+                if (a.IsActive)
+                {
+                    frameCounter++;
+                    if (frameCounter >= switchFrame)
+                    {
+                        frameCounter = 0;
+                        currentFrame.X++;
+
+                        if (currentFrame.X * a.FrameWidth >= a.Image.Width) currentFrame.X = 0;
+ 
+                    }
+                }
+                else
                 {
                     frameCounter = 0;
-                    currentFrame.X++;
-
-                    if (currentFrame.X * a.FrameWidth >= a.Image.Width) currentFrame.X = 0;
+                    currentFrame.X = 0;
                 }
+
+                a.CurrentFrame = currentFrame;
+                a.SourceRect = new Rectangle((int)currentFrame.X * a.FrameWidth, (int)currentFrame.Y * a.FrameHeight, a.FrameWidth, a.FrameHeight);
             }
-            else
-            {
-                frameCounter = 0;
-                currentFrame.X = 1;
-            }
-            a.CurrentFrame = currentFrame;
-            a.SourceRect = new Rectangle((int)currentFrame.X * a.FrameWidth, (int)currentFrame.Y * a.FrameHeight, a.FrameWidth, a.FrameHeight);
+
+            currentFrame = a.CurrentFrame;
+
         }
 
         #endregion

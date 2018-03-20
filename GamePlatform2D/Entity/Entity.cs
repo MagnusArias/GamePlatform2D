@@ -17,6 +17,7 @@ namespace GamePlatform2D
         protected Texture2D image;
         protected Vector2 position, velocity, prevPosition, origPosition, destPosition;
         protected bool activateGravity, syncTilePosition, onTile;
+        protected int[] numFrames = {1, 1, 1, 8, 4, 4, 4, 1, 8, 1, 6 };
 
         public struct Speeds
         {
@@ -38,10 +39,8 @@ namespace GamePlatform2D
             public bool squat;
             public bool jumping;
             public bool falling;
-        }
-        
-        public struct Moves
-        {
+            public bool standing;
+
             public bool highAttack;
             public bool normalAttack;
             public bool lowAttack;
@@ -51,6 +50,7 @@ namespace GamePlatform2D
             public bool knockback;
             public bool flinching;
         }
+
 
         protected List<List<string>> attributes, contents;
         #endregion

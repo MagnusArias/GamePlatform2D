@@ -114,7 +114,7 @@ namespace GamePlatform2D
         public void Draw(SpriteBatch spriteBatch)
         {
             currentScreen.Draw(spriteBatch);
-            if (transition) animation.Draw(spriteBatch);
+            if (transition) animation.Draw(spriteBatch, SpriteEffects.None);
         }
         #endregion
 

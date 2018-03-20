@@ -79,6 +79,7 @@
   <ItemGroup>
     <Content Include="Content\bullet.png" />
     <Content Include="Content\null.png" />
+    <Content Include="Content\player-spritemap.png" />
     <Content Include="Content\player.png" />
     <Content Include="Content\Splash\image1.png" />
     <Content Include="Content\Splash\image2.png" />

@@ -151,7 +151,7 @@ namespace GamePlatform2D
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            animation.Draw(spriteBatch);
+            animation.Draw(spriteBatch, SpriteEffects.None);
         }
     }
 }

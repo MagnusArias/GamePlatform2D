@@ -72,7 +72,7 @@ namespace GamePlatform2D
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            moveAnimation.Draw(spriteBatch);
+            moveAnimation.Draw(spriteBatch, SpriteEffects.None);
         }
     }
 }

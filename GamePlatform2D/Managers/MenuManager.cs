@@ -172,7 +172,7 @@ namespace GamePlatform2D
         {
             for (int i = 0; i < animation.Count; i++)
             {
-                animation[i].Draw(spriteBatch);
+                animation[i].Draw(spriteBatch, SpriteEffects.None);
             }
         }
         #endregion

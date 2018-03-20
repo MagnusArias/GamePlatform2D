@@ -93,7 +93,7 @@ namespace GamePlatform2D
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            animation[imageNumber].Draw(spriteBatch);
+            animation[imageNumber].Draw(spriteBatch, SpriteEffects.None);
         }
         #endregion
 

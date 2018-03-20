@@ -28,7 +28,7 @@ namespace GamePlatform2D
         {
             // TODO: Add your initialization logic here
             ScreenManager.Instance.Initialize();
-            ScreenManager.Instance.Dimensions = new Vector2(1024, 768);
+            ScreenManager.Instance.Dimensions = new Vector2(800, 600);
             graphics.PreferredBackBufferWidth = (int)ScreenManager.Instance.Dimensions.X;
             graphics.PreferredBackBufferHeight = (int)ScreenManager.Instance.Dimensions.Y;
             graphics.ApplyChanges();
@@ -80,7 +80,7 @@ namespace GamePlatform2D
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.SkyBlue);
 
             spriteBatch.Begin(
                 sortMode: SpriteSortMode.Immediate,
