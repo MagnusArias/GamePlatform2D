@@ -110,7 +110,7 @@ namespace GamePlatform2D
                 {
                     e.OnTile = false;
                     containsEntity = false;
-                    e.ActivateGravity = true;
+                    //e.ActivateGravity = true;
                 }
             }
 
@@ -123,7 +123,7 @@ namespace GamePlatform2D
                 {
                     // bottom collision
                     e.Position = new Vector2(e.Position.X, position.Y - e.Animation.FrameHeight);
-                    e.ActivateGravity = false;
+                    //e.ActivateGravity = false;
                     e.OnTile = true;
                     containsEntity = true;
                 }
@@ -132,7 +132,7 @@ namespace GamePlatform2D
                     // top collision
                     e.Position = new Vector2(e.Position.X, position.Y + Layer.TileDimensions.Y);
                     e.Velocity = new Vector2(e.Velocity.X, 0);
-                    e.ActivateGravity = true;
+                    //e.ActivateGravity = true;
                 }
                 else if (e.Rect.Right >= rect.Left && preve.Right <= prevTile.Left)
                 {

@@ -18,6 +18,7 @@ namespace GamePlatform2D
         protected Vector2 position, velocity, prevPosition, origPosition, destPosition;
         protected bool activateGravity, syncTilePosition, onTile;
         protected int[] numFrames = {1, 1, 1, 8, 4, 4, 4, 1, 8, 1, 6 };
+        protected SpriteFont spriteFont;
 
         public struct Speeds
         {
@@ -117,6 +118,7 @@ namespace GamePlatform2D
             this.content = new ContentManager(content.ServiceProvider, "Content");
             moveAnimation = new Animation();
             ssAnimation = new SpriteSheetAnimation();
+            spriteFont = this.content.Load<SpriteFont>("Font1");
 
             for (int i = 0; i < attributes.Count; i++)
             {

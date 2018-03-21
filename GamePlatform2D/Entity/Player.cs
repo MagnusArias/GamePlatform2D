@@ -27,10 +27,10 @@ namespace GamePlatform2D
             bullets = new List<Bullet>();
             bulletImage = content.Load<Texture2D>("bullet");
 
-            localSpeeds.jump = 300.0f;
-            localSpeeds.move = 100.0f;
-            localSpeeds.maxFall = 300.0f;
-            localSpeeds.stop = 50.0f;
+            localSpeeds.jump = 5.0f;
+            localSpeeds.move = 5.0f;
+            localSpeeds.maxFall = 10.0f;
+            localSpeeds.stop = 2.0f;
         }
 
         public override void UnloadContent()
@@ -46,8 +46,17 @@ namespace GamePlatform2D
             moveAnimation.DrawColor = Color.White;
             GetNextPosition(velocity);
 
-            if (input.KeyDown(Keys.Right, Keys.D)) localState.right = true;
-            else if (input.KeyDown(Keys.Left, Keys.A)) localState.left = true;
+            if (input.KeyDown(Keys.Right, Keys.D))
+            {
+                localState.left = false;
+                localState.right = true;
+                
+            }
+            else if (input.KeyDown(Keys.Left, Keys.A))
+            {
+                localState.right = false;
+                localState.left = true;
+            }
             else localState.right = localState.left = false;
 
             if (input.KeyDown(Keys.Up, Keys.W)) localState.jumping = true;
@@ -109,9 +118,17 @@ namespace GamePlatform2D
             foreach (Bullet b in bullets) b.Draw(spriteBatch);
             if (CheckDirection(localState) == 1) moveAnimation.Draw(spriteBatch, SpriteEffects.None);
             else if (CheckDirection(localState) == -1) moveAnimation.Draw(spriteBatch, SpriteEffects.FlipHorizontally);
+
+            spriteBatch.DrawString(spriteFont, 
+                velocity.X.ToString() + "\n" + 
+                velocity.Y.ToString() + "\n" + 
+                localState.left.ToString() +"\n" +
+                localState.right.ToString() + "\n" +
+                localState.standing.ToString() + "\n" +
+                localState.jumping.ToString() , new Vector2(100, 100), Color.White);
         }
 
-        private void GetNextPosition(Vector2 velocity)
+        private void GetNextPosition(Vector2 vel)
         {
             if (localState.knockback)
             {
@@ -184,7 +201,7 @@ namespace GamePlatform2D
                 if (velocity.Y > localSpeeds.maxFall) velocity.Y = localSpeeds.maxFall;
             }
 
-            this.velocity = velocity;
+           // this.velocity = velocity;
         }
 
         private int CheckDirection(States states)
