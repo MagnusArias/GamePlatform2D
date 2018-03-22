@@ -11,6 +11,7 @@ namespace GamePlatform2D
         EntityManager player;
         //EntityManager enemies;
         Map map;
+        HudManager hud;
         bool blockInput;
         #endregion
 
@@ -26,10 +27,13 @@ namespace GamePlatform2D
             player = new EntityManager();
             //enemies = new EntityManager();
             map = new Map();
+            hud = new HudManager();
+
 
             //enemies.LoadContent("Enemy", content, "Load/Entity/Enemy.ma", "Level1", input);
             map.LoadContent(content, map, "Map1");
             player.LoadContent("Player", content, "Load/Entity/Player.ma", "", input, map.layer);
+            hud.LoadContent(content, null, "hud", new Vector2(0, 0));
         }
 
         public override void UnloadContent()
@@ -46,6 +50,7 @@ namespace GamePlatform2D
             HandleInput();
             map.Update(gameTime);
             player.Update(gameTime, map);
+            hud.Update(gameTime, player.Entities[0]);
             //enemies.Update(gameTime, map);
 
             //player.EntityColision(enemies);
@@ -55,12 +60,13 @@ namespace GamePlatform2D
         {
             map.Draw(spriteBatch);
             player.Draw(spriteBatch);
+            hud.Draw(spriteBatch);
             //enemies.Draw(spriteBatch);
         }
 
         public override void HandleInput()
         {
-           if (!blockInput)
+            if (!blockInput)
             {
                 player.Entities[0].SetJumping(Keys.Up);
                 player.Entities[0].SetLeft(Keys.Left);

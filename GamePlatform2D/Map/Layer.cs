@@ -71,11 +71,11 @@ namespace GamePlatform2D
                             nullTile = fileManager.Contents[i][j];
                             break;
 
-                        case "MapSize":
+                        /*case "MapSize":
                             string[] mapSize = fileManager.Contents[i][j].Split(',');
                             numRows = int.Parse(mapSize[1]);
                             numCols = int.Parse(mapSize[0]);
-                            break;
+                            break;*/
 
                         case "Motion":
                             motion.Add(fileManager.Contents[i][j]);
@@ -89,9 +89,9 @@ namespace GamePlatform2D
                             //wczytanie jednej linii
                             for (int col = 0; col < fileManager.Contents[i].Count; col++)
                             {
-                                // sprawdzanie pojeydnczeog symbolu
+                                // sprawdzanie pojedynczeog symbolu
                                 string[] split = fileManager.Contents[i][col].Split(',');
-
+                                numCols = fileManager.Contents[i].Count();
                                 tempTiles.Add(new Tile());
 
                                 if (fileManager.Contents[i][col] != nullTile)
@@ -105,6 +105,7 @@ namespace GamePlatform2D
                             }
                             tiles.Add(tempTiles);
                             indexY++;
+                            numRows = indexY;
                             break;
 
                         case "EndLayer":

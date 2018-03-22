@@ -44,6 +44,7 @@ namespace GamePlatform2D
             linkID = new List<string>();
             fAnimation = new FadeAnimation();
             ssAnimation = new SpriteSheetAnimation();
+            axis = 2;
 
             position = Vector2.Zero;
             itemNumber = 0;
@@ -56,24 +57,24 @@ namespace GamePlatform2D
                     switch (fileManager.Attributes[i][n])
                     {
                         case "Item":
-                            menuItems.Add(contents[i][n]);
+                            menuItems.Add(fileManager.Contents[i][n]);
                             break;
 
                         case "Image":
-                            menuImages.Add(this.content.Load<Texture2D>(contents[i][n]));
+                            menuImages.Add(this.content.Load<Texture2D>(fileManager.Contents[i][n]));
                             break;
 
                         case "Axis":
-                            axis = int.Parse(contents[i][n]);
+                            axis = int.Parse(fileManager.Contents[i][n]);
                             break;
 
                         case "Position":
-                            string[] temp = contents[i][n].Split(' ');
+                            string[] temp = fileManager.Contents[i][n].Split(' ');
                             position = new Vector2(float.Parse(temp[0]), float.Parse(temp[1]));
                             break;
 
                         case "Source":
-                            temp = contents[i][n].Split(' ');
+                            temp = fileManager.Contents[i][n].Split(' ');
                             sourceRect = new Rectangle(int.Parse(temp[0]),
                                 int.Parse(temp[1]),
                                 int.Parse(temp[2]),
@@ -81,23 +82,23 @@ namespace GamePlatform2D
                             break;
 
                         case "Font":
-                            font = this.content.Load<SpriteFont>(contents[i][n]);
+                            font = this.content.Load<SpriteFont>(fileManager.Contents[i][n]);
                             break;
 
                         case "Animation":
-                            animationTypes.Add(contents[i][n]);
+                            animationTypes.Add(fileManager.Contents[i][n]);
                             break;
 
                         case "Align":
-                            align = contents[i][n];
+                            align = fileManager.Contents[i][n];
                             break;
 
                         case "LinkType":
-                            linkType.Add(contents[i][n]);
+                            linkType.Add(fileManager.Contents[i][n]);
                             break;
 
                         case "LinkID":
-                            linkID.Add(contents[i][n]);
+                            linkID.Add(fileManager.Contents[i][n]);
                             break;
                     }
                 }
@@ -216,7 +217,7 @@ namespace GamePlatform2D
             {
                 dimensions = new Vector2(
                     font.MeasureString(menuItems[i]).X + menuImages[i].Width,
-                    font.MeasureString(menuItems[i]).Y + menuImages[i].Height);
+                font.MeasureString(menuItems[i]).Y + menuImages[i].Height);
 
                 if (axis == 1) pos.Y = (ScreenManager.Instance.Dimensions.Y - dimensions.Y) / 2;
                 else pos.X = (ScreenManager.Instance.Dimensions.X - dimensions.X) / 2;

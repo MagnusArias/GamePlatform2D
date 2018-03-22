@@ -28,7 +28,7 @@ namespace GamePlatform2D
         {
             // TODO: Add your initialization logic here
             ScreenManager.Instance.Initialize();
-            ScreenManager.Instance.Dimensions = new Vector2(800, 600);
+            ScreenManager.Instance.Dimensions = new Vector2(640, 480);
             graphics.PreferredBackBufferWidth = (int)ScreenManager.Instance.Dimensions.X;
             graphics.PreferredBackBufferHeight = (int)ScreenManager.Instance.Dimensions.Y;
             graphics.ApplyChanges();
@@ -48,7 +48,7 @@ namespace GamePlatform2D
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             ScreenManager.Instance.LoadContent(Content);
- // TODO: use this.Content to load your game content here
+            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>

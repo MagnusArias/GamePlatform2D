@@ -11,7 +11,7 @@ namespace GamePlatform2D
         #region Variables
         int frameCounter, switchFrame;
         Vector2 currentFrame;
-        int count;
+        int count, currFrame;
         #endregion
 
         #region Properties
@@ -20,9 +20,10 @@ namespace GamePlatform2D
 
         public SpriteSheetAnimation()
         {
-            frameCounter = 0;
-            switchFrame = numFrames;
+            frameCounter = currFrame = 0;
+            switchFrame = numFrames = (int)Frames.X;
             count = 0;
+            delay = 5;
         }
 
         #region Public Methods
@@ -46,7 +47,7 @@ namespace GamePlatform2D
                         currentFrame.X++;
 
                         if (currentFrame.X * a.FrameWidth >= a.Image.Width) currentFrame.X = 0;
- 
+
                     }
                 }
                 else
@@ -60,7 +61,6 @@ namespace GamePlatform2D
             }
 
             currentFrame = a.CurrentFrame;
-
         }
 
         #endregion

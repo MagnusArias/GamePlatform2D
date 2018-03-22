@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -23,6 +18,7 @@ namespace GamePlatform2D
         private ContentManager content;
         private bool isActive;
         protected int numFrames, delay;
+        protected int timesPlayed;
 
         #endregion
 
@@ -41,6 +37,7 @@ namespace GamePlatform2D
             get { return delay; }
             set { delay = value; }
         }
+
         /// <summary>
         /// Pozycja animacji
         /// </summary>
@@ -49,6 +46,7 @@ namespace GamePlatform2D
             set { position = value; }
             get { return position; }
         }
+        
         /// <summary>
         /// Czy animacja jest aktywna, w przypadku 'false' nie jest rysowana ani przewijana
         /// </summary>
@@ -66,15 +64,17 @@ namespace GamePlatform2D
             get { return numFrames; }
             set { numFrames = value; }
         }
+        
         /// <summary>
         /// Przezroczystosc animacji
         /// </summary>
         /// 
-       public virtual float Alpha
+        public virtual float Alpha
         {
             get { return alpha; }
             set { alpha = value; }
         }
+       
         /// <summary>
         /// Skala animacji, jednowymiarowa
         /// </summary>
@@ -83,6 +83,7 @@ namespace GamePlatform2D
             get { return scale; }
             set { scale = value; }
         }
+        
         /// <summary>
         /// Czcionka
         /// </summary>
@@ -109,6 +110,7 @@ namespace GamePlatform2D
             set { currentFrame = value; }
             get { return currentFrame; }
         }
+        
         /// <summary>
         /// Szerokośc klatki
         /// </summary>
@@ -116,6 +118,7 @@ namespace GamePlatform2D
         {
             get { return image.Width / (int)Frames.X; }
         }
+       
         /// <summary>
         /// Szerokość klatki
         /// </summary>
@@ -160,6 +163,7 @@ namespace GamePlatform2D
             rotation = 0.0f;
             scale = 1.0f;
             alpha = 1.0f;
+            timesPlayed = 0;
             isActive = false;
             drawColor = Color.White;
 
@@ -190,7 +194,16 @@ namespace GamePlatform2D
             if (image != null)
             {
                 origin = new Vector2(sourceRect.Width / 2, sourceRect.Height / 2);
-                spriteBatch.Draw(image, position + origin, sourceRect, drawColor * alpha, rotation, origin, scale, se, 0.0f);
+                spriteBatch.Draw(
+                    texture: image, 
+                    position: position + origin, 
+                    sourceRectangle: sourceRect, 
+                    color: drawColor * alpha, 
+                    rotation: rotation, 
+                    origin: origin,
+                    scale: scale, 
+                    effects: se, 
+                    layerDepth: 0.0f);
             }
 
             if (text != String.Empty)
@@ -198,6 +211,16 @@ namespace GamePlatform2D
                 origin = new Vector2(font.MeasureString(text).X / 2, font.MeasureString(text).Y / 2);
                 spriteBatch.DrawString(font, text, position + origin, color * alpha, rotation, origin, scale, SpriteEffects.None, 0.0f);
             }
+        }
+
+        public bool HasPlayedOnce()
+        {
+            return timesPlayed > 0;
+        }
+
+        public bool HasPlayed(int i)
+        {
+            return timesPlayed == i;
         }
         #endregion
     }

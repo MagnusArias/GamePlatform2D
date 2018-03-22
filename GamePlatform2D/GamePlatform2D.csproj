@@ -47,15 +47,13 @@
     <Compile Include="Animation\Animation.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Entity\Projectiles\Bullet.cs" />
-    <Compile Include="HudManager.cs" />
+    <Compile Include="Managers\HudManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Entity\FloatRect.cs" />
     <Compile Include="Map\Layer.cs" />
-    <Compile Include="Map\Collision.cs" />
     <Compile Include="Entity\Enemy.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Animation\FadeAnimation.cs" />
-    <Compile Include="Map\Layers.cs" />
     <Compile Include="Managers\FileManager.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Map\Map.cs" />

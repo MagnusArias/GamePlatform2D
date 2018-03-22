@@ -9,22 +9,22 @@ namespace GamePlatform2D
     public abstract class Entity
     {
         #region Variables
+        public enum Directions { Left, Right };
+
         protected Layer layer;
         protected FileManager fileManager;
-        protected int health, range, direction;
+        protected int health, range;
+        protected Directions direction;
         protected Animation moveAnimation;
         protected SpriteSheetAnimation ssAnimation;
         protected InputManager inputManager;
-        protected float gravity;
         protected ContentManager content;
         protected Texture2D image;
         protected Vector2 position, velocity, prevPosition, origPosition;
-        protected bool activateGravity, syncTilePosition, onTile;
+        protected bool syncTilePosition, onTile;
         protected int[] numFrames = { 1, 1, 1, 8, 4, 4, 4, 1, 8, 1, 6 };
         protected SpriteFont spriteFont;
         protected bool alreadyDoubleJump;
-
-        public enum Directions { Left, Right };
 
         //KOLIZJE
         protected int currRow, currCol;
@@ -43,6 +43,7 @@ namespace GamePlatform2D
             public float doubleJump;
 
         }
+
         public struct States
         {
             public bool left;
@@ -75,25 +76,15 @@ namespace GamePlatform2D
         #endregion
 
         #region Properties
-        public bool ActivateGravity
-        {
-            set { activateGravity = value; }
-            get { return activateGravity; }
-        }
-
         public Animation Animation
         {
             get { return moveAnimation; }
         }
 
-        public int Direction
+        public Directions Direction
         {
             get { return direction; }
-            set
-            {
-                direction = value;
-                //destPosition.X = (direction == 2) ? destPosition.X = origPosition.X - range : destPosition.X = origPosition.X + range;
-            }
+            set { direction = value; }
         }
 
         public Speeds GetSpeeds
@@ -123,24 +114,24 @@ namespace GamePlatform2D
         {
             get { return prevPosition; }
         }
-        
+
         public FloatRect Rect
         {
             get { return new FloatRect(position.X, position.Y, moveAnimation.FrameWidth, moveAnimation.FrameHeight); }
         }
-        
+
         public bool SyncTilePosition
         {
             get { return syncTilePosition; }
             set { syncTilePosition = value; }
         }
-        
+
         public Vector2 Velocity
         {
             get { return velocity; }
             set { velocity = value; }
         }
-               
+
         #endregion
 
         #region Public Methods
@@ -187,16 +178,12 @@ namespace GamePlatform2D
                 }
             }
 
-            gravity = 10.0f;
             velocity = Vector2.Zero;
-            temp = Vector2.Zero;
             syncTilePosition = false;
-            activateGravity = true;
+
             layer = lyr;
             moveAnimation.LoadContent(content, image, "", position);
         }
-
-        
 
         public virtual void UnloadContent()
         {
@@ -210,12 +197,12 @@ namespace GamePlatform2D
 
         public void CalculateCorners(float x, float y)
         {
-            int leftTile = (int)((x - collisionBox.X /2 )/ layer.TileSize.X);
-            int rightTile = (int)((x + collisionBox.X /2 - 1) / layer.TileSize.X);
-            int topTile = (int)((y - collisionBox.Y ) / layer.TileSize.Y);
-            int bottomTile = (int)((y + collisionBox.Y  - 1) / layer.TileSize.Y);
+            float leftTile = (x - collisionBox.X / 2) / layer.TileSize.X;
+            float rightTile = (x + collisionBox.X / 2 - 1) / layer.TileSize.X;
+            float topTile = (y - collisionBox.Y / 2) / layer.TileSize.Y;
+            float bottomTile = (y + collisionBox.Y / 2- 1) / layer.TileSize.Y;
 
-            if (topTile < 0 || bottomTile >= layer.NumRows || 
+            if (topTile < 0 || bottomTile >= layer.NumRows ||
                 leftTile < 0 || rightTile >= layer.NumCols)
             {
                 topLeft = topRight = bottomLeft = bottomRight = false;
@@ -299,10 +286,9 @@ namespace GamePlatform2D
             position = pos;
         }
 
-        public virtual void Update(GameTime gameTime, InputManager input, Collision col, Layer layer)
+        public virtual void Update(GameTime gameTime, InputManager input, Layer layer)
         {
             syncTilePosition = false;
-            prevPosition = position;
             moveAnimation.IsActive = true;
         }
 
@@ -311,12 +297,11 @@ namespace GamePlatform2D
 
         }
 
-
         public void SetJumping(Keys k)
         {
             if (state.knockback) return;
 
-            if (inputManager.KeyDown(k) && state.falling && !alreadyDoubleJump)
+            if (inputManager.KeyDown(k) && !state.jumping && state.falling && !alreadyDoubleJump)
             {
                 state.doubleJump = true;
             }
@@ -327,14 +312,17 @@ namespace GamePlatform2D
         {
             state.jumping = inputManager.KeyDown(k);
         }
+
         public void SetLeft(Keys k)
         {
             state.left = inputManager.KeyDown(k);
         }
+
         public void SetRight(Keys k)
         {
             state.right = inputManager.KeyDown(k);
         }
+
         public void SetDown(Keys k)
         {
             state.squat = inputManager.KeyDown(k);

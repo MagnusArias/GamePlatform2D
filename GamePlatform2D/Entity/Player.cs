@@ -9,15 +9,23 @@ namespace GamePlatform2D
 {
     public class Player : Entity
     {
+        #region Variables
         List<Bullet> bullets;
         Texture2D bulletImage;
         int flinchCount;
         bool skill_doubleJump;
+        int dashCooldown, dashTimer, maxDashCooldown;
         private static Texture2D collisionRect;
+        #endregion
 
+        #region Properties
+
+        #endregion
+
+        #region Public Methods
         public override void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input, Layer l)
         {
-            base.LoadContent(content, attributes, contents, input , l);
+            base.LoadContent(content, attributes, contents, input, l);
             string[] saveAttribute = { "PlayerPosition" };
             string[] saveContent = { position.X.ToString() + ',' + position.Y.ToString() };
 
@@ -39,19 +47,17 @@ namespace GamePlatform2D
             skill_doubleJump = false;
 
             alreadyDoubleJump = false;
-            collisionBox.X = (int)(moveAnimation.FrameWidth-10);
+            collisionBox.X = moveAnimation.FrameWidth;
             collisionBox.Y = moveAnimation.FrameHeight;
+
+            dashCooldown = 190;
+            maxDashCooldown = 200;
 
         }
 
-        private void DrawRectangle(Rectangle coords, Color color, SpriteBatch spriteBatch)
+        public bool DashingReady()
         {
-            if (collisionRect == null)
-            {
-                collisionRect = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
-                collisionRect.SetData(new[] { Color.White });
-            }
-            spriteBatch.Draw(collisionRect, coords, color);
+            return dashCooldown >= 200 && (state.falling || state.jumping || state.left || state.right) && !state.knockback;
         }
 
         public override void UnloadContent()
@@ -60,8 +66,9 @@ namespace GamePlatform2D
             moveAnimation.UnloadContent();
         }
 
-        public override void Update(GameTime gameTime, InputManager input, Collision col, Layer layer)
+        public override void Update(GameTime gameTime, InputManager input, Layer layer)
         {
+            //base.Update(gameTime, input, col, layer);
             moveAnimation.DrawColor = Color.White;
 
             GetNextPosition();
@@ -70,21 +77,21 @@ namespace GamePlatform2D
 
             if (velocity.X == 0) position.X = (int)position.X;
 
-            /*
 
-            if (input.KeyDown(Keys.Z) && CheckDirection(localState) != 0)
+            /*
+            if (input.KeyDown(Keys.Z) )
             {
                 bullets.Add(new Bullet(
                     new Vector2(
                         position.X + moveAnimation.FrameWidth / 2,
                         position.Y + moveAnimation.FrameHeight / 2),
-                    CheckDirection(localState),
+                    direction,
                     400.0f,
                     bulletImage));
-            }*/
+            }
 
             foreach (Bullet b in bullets) b.Update(gameTime);
-
+            */
             if (state.flinching)
             {
                 flinchCount++;
@@ -94,13 +101,17 @@ namespace GamePlatform2D
                 }
             }
 
-            position += velocity;
-            CheckAnimation(state);
+            CheckAnimation();
             moveAnimation.Position = position;
             ssAnimation.Update(gameTime, ref moveAnimation);
 
+            if (!state.normalAttack && !state.highAttack && !state.lowAttack && !state.knockback && !state.dashing)
+            {
+                if (state.right) direction = Directions.Right;
+                if (state.left) direction = Directions.Left;
+            }
             Console.WriteLine(velocity.X.ToString() + "\t" + velocity.Y.ToString() + "\t" + state.left.ToString() + " " + state.right.ToString() + " " + state.jumping.ToString() + " " + state.falling.ToString());
-            Camera.Instance.SetFocalPoint(new Vector2(position.X, position.Y));
+            Camera.Instance.SetFocalPoint(new Vector2(position.X, position.Y), position);
         }
 
         public void Stop()
@@ -127,7 +138,7 @@ namespace GamePlatform2D
                 flinchCount = 0;
                 moveAnimation.DrawColor = Color.Red;
 
-                if (direction == 1) velocity.X = -1;
+                if (direction == Directions.Right) velocity.X = -1;
                 else velocity.X = 1;
                 velocity.Y = -3;
                 state.knockback = true;
@@ -139,17 +150,17 @@ namespace GamePlatform2D
         public override void Draw(SpriteBatch spriteBatch)
         {
             foreach (Bullet b in bullets) b.Draw(spriteBatch);
-            /*if (localState.flinching && !localState.knockback)
-            {
+            if (state.flinching && !state.knockback)
                 if (flinchCount % 10 < 5) return;
-            }
-            if (CheckDirection(localState) == 1) moveAnimation.Draw(spriteBatch, SpriteEffects.None);
-            else if (CheckDirection(localState) == -1) moveAnimation.Draw(spriteBatch, SpriteEffects.FlipHorizontally);
-            */
-            moveAnimation.Draw(spriteBatch, SpriteEffects.None);
+
+            if (direction == Directions.Right) moveAnimation.Draw(spriteBatch, SpriteEffects.None);
+            else if (direction == Directions.Left) moveAnimation.Draw(spriteBatch, SpriteEffects.FlipHorizontally);
+ 
             DrawRectangle(new Rectangle((int)position.X, (int)position.Y, (int)collisionBox.X, (int)collisionBox.Y), Color.White, spriteBatch);
         }
+        #endregion
 
+        #region Private Methods
         private void GetNextPosition()
         {
             if (state.knockback)
@@ -197,11 +208,11 @@ namespace GamePlatform2D
             {
                 //dashCooldown = 0;
                 //dashTimer++;
-                if (direction == 1)
+                if (direction == Directions.Right)
                 {
                     velocity.X = speed.move * (float)(10 - /*dashTimer * */ 0.4);
                 }
-                else if (direction == -1)
+                else if (direction == Directions.Left)
                 {
                     velocity.X = -speed.move * (float)(10 - /*dashTimer * */ 0.4);
                 }
@@ -225,8 +236,7 @@ namespace GamePlatform2D
 
         }
 
-
-        private void CheckAnimation(States states)
+        private void CheckAnimation()
         {
             /*
              * teleport
@@ -242,62 +252,74 @@ namespace GamePlatform2D
              * squat
              * standing
              */
-            if (states.teleporting)
+
+            if (state.teleporting)
             {
                 // animacja teleportowania
             }
-            else if (states.knockback)
+            else if (state.knockback)
             {
                 // animacja knockback'u
             }
-            else if (states.highAttack)
+            else if (state.highAttack)
             {
                 // atak w powietrzu
             }
-            else if (states.normalAttack)
+            else if (state.normalAttack)
             {
                 // atak na stojaka
             }
-            else if (states.lowAttack)
+            else if (state.lowAttack)
             {
                 // atak z przykuca
             }
-            else if (states.jumping)
+            else if (state.jumping)
             {
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 1);
                 ssAnimation.NumFrames = 1;
                 ssAnimation.Delay = 1;
             }
-            else if (states.falling)
+            else if (state.falling)
             {
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 2);
                 ssAnimation.NumFrames = 1;
                 ssAnimation.Delay = 1;
             }
-            else if (states.dashing)
+            else if (state.dashing)
             {
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 3);
                 ssAnimation.NumFrames = 8;
                 ssAnimation.Delay = 4;
             }
-            else if (states.right || states.left)
+            else if (state.right || state.left)
             {
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 3);
                 ssAnimation.NumFrames = 8;
-                ssAnimation.Delay = 4;
+                ssAnimation.Delay = 7;
             }
-            else if (states.squat)
+            else if (state.squat)
             {
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 7);
                 ssAnimation.NumFrames = 1;
                 ssAnimation.Delay = 1;
             }
-            else if (states.standing)
+            else if (state.standing)
             {
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 0);
                 ssAnimation.NumFrames = 1;
                 ssAnimation.Delay = 11;
             }
         }
+
+        private void DrawRectangle(Rectangle coords, Color color, SpriteBatch spriteBatch)
+        {
+            if (collisionRect == null)
+            {
+                collisionRect = new Texture2D(ScreenManager.Instance.GraphicsDevice, 1, 1);
+                collisionRect.SetData(new[] { Color.White });
+            }
+            spriteBatch.Draw(collisionRect, coords, color);
+        }
+        #endregion
     }
 }

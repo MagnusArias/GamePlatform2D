@@ -29,11 +29,12 @@ namespace GamePlatform2D
             get { return viewMatrix; }
         }
 
-        public void SetFocalPoint(Vector2 focalPosition)
+        public void SetFocalPoint(Vector2 focalPosition, Vector2 pos)
         {
             position = new Vector2(
-                focalPosition.X - ScreenManager.Instance.Dimensions.X / ScreenManager.Instance.Scale.X / 2,
-                focalPosition.Y - ScreenManager.Instance.Dimensions.Y / ScreenManager.Instance.Scale.Y / 2);
+                MathHelper.Lerp(focalPosition.X - ScreenManager.Instance.Dimensions.X / ScreenManager.Instance.Scale.X / 2, pos.X, 0.08f),
+                 MathHelper.Lerp(focalPosition.Y - ScreenManager.Instance.Dimensions.Y / ScreenManager.Instance.Scale.Y / 2, pos.Y, 0.08f)
+                 );
 
             if (position.X < 0) position.X = 0;
             if (position.Y < 0) position.Y = 0;
@@ -42,7 +43,7 @@ namespace GamePlatform2D
         public void Update()
         {
             //viewMatrix.Scale = new Vector3(ScreenManager.Instance.Scale, ScreenManager.Instance.Scale, 1);
-            viewMatrix = Matrix.CreateTranslation(new Vector3(-position* ScreenManager.Instance.Scale, 0));
+            viewMatrix = Matrix.CreateTranslation(new Vector3(-position * ScreenManager.Instance.Scale, 0));
             viewMatrix.Scale = new Vector3(ScreenManager.Instance.Scale.X, ScreenManager.Instance.Scale.Y, 1);
         }
     }
