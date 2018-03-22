@@ -32,6 +32,7 @@ namespace GamePlatform2D
             graphics.PreferredBackBufferWidth = (int)ScreenManager.Instance.Dimensions.X;
             graphics.PreferredBackBufferHeight = (int)ScreenManager.Instance.Dimensions.Y;
             graphics.ApplyChanges();
+            ScreenManager.Instance.GraphicsDevice = graphics.GraphicsDevice;
             ScreenManager.Instance.Scale = new Vector2(
                 (float)ScreenManager.Instance.Dimensions.X / 640.0f,
                 (float)ScreenManager.Instance.Dimensions.Y / 480.0f);

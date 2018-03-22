@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -9,7 +8,8 @@ namespace GamePlatform2D
     public class GameplayScreen : GameScreen
     {
         #region Variables
-        EntityManager player;//, enemies;
+        EntityManager player;
+        //EntityManager enemies;
         Map map;
         bool blockInput;
         #endregion
@@ -47,22 +47,6 @@ namespace GamePlatform2D
             map.Update(gameTime);
             player.Update(gameTime, map);
             //enemies.Update(gameTime, map);
-
-
-            Entity e;
-
-            for (int i = 0; i < player.Entities.Count; i++)
-            {
-                e = player.Entities[i];
-                player.Entities[i] = e;
-            }
-
-            /*for (int i = 0; i < enemies.Entities.Count; i++)
-            {
-                e = enemies.Entities[i];
-                map.UpdateCollision(ref e);
-                enemies.Entities[i] = e;
-            }*/
 
             //player.EntityColision(enemies);
         }

@@ -10,6 +10,7 @@ namespace GamePlatform2D
     {
         #region Variables
         protected Layer layer;
+        protected FileManager fileManager;
         protected int health, range, direction;
         protected Animation moveAnimation;
         protected SpriteSheetAnimation ssAnimation;
@@ -23,6 +24,7 @@ namespace GamePlatform2D
         protected SpriteFont spriteFont;
         protected bool alreadyDoubleJump;
 
+        public enum Directions { Left, Right };
 
         //KOLIZJE
         protected int currRow, currCol;
@@ -38,6 +40,7 @@ namespace GamePlatform2D
             public float maxFall;
             public float jump;
             public float stopJump;
+            public float doubleJump;
 
         }
         public struct States
@@ -205,12 +208,12 @@ namespace GamePlatform2D
 
         }
 
-        public void CalculateCorners(Vector2 pos)
+        public void CalculateCorners(float x, float y)
         {
-            int leftTile = (int)((pos.X - collisionBox.X / 2) / layer.TileSize.X);
-            int rightTile = (int)((pos.X + collisionBox.X / 2 - 1) / layer.TileSize.X);
-            int topTile = (int)((pos.Y - collisionBox.Y / 2) / layer.TileSize.Y);
-            int bottomTile = (int)((pos.Y + collisionBox.Y / 2 - 1) / layer.TileSize.Y);
+            int leftTile = (int)((x - collisionBox.X /2 )/ layer.TileSize.X);
+            int rightTile = (int)((x + collisionBox.X /2 - 1) / layer.TileSize.X);
+            int topTile = (int)((y - collisionBox.Y ) / layer.TileSize.Y);
+            int bottomTile = (int)((y + collisionBox.Y  - 1) / layer.TileSize.Y);
 
             if (topTile < 0 || bottomTile >= layer.NumRows || 
                 leftTile < 0 || rightTile >= layer.NumCols)
@@ -237,7 +240,7 @@ namespace GamePlatform2D
             dest = position + velocity;
             temp = position;
 
-            CalculateCorners(new Vector2(position.X, dest.Y));
+            CalculateCorners(position.X, dest.Y);
 
             if (velocity.Y < 0)
             {
@@ -259,7 +262,7 @@ namespace GamePlatform2D
                 else temp.Y += velocity.Y;
             }
 
-            CalculateCorners(new Vector2(dest.X, position.Y));
+            CalculateCorners(dest.X, position.Y);
 
             if (velocity.X < 0)
             {
@@ -282,7 +285,7 @@ namespace GamePlatform2D
 
             if (!state.falling)
             {
-                CalculateCorners(new Vector2(position.X, dest.Y + 1));
+                CalculateCorners(position.X, dest.Y + 1);
                 if (!bottomLeft && !bottomRight)
                 {
                     state.falling = true;
@@ -313,7 +316,7 @@ namespace GamePlatform2D
         {
             if (state.knockback) return;
 
-            if (inputManager.KeyDown(k) && !state.jumping && !alreadyDoubleJump)
+            if (inputManager.KeyDown(k) && state.falling && !alreadyDoubleJump)
             {
                 state.doubleJump = true;
             }

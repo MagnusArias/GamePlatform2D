@@ -13,7 +13,7 @@ namespace GamePlatform2D
     public class Layer
     {
         List<List<Tile>> tiles;     // tutaj przechowywana jest mapa
-        List<string> motion, solid;
+        List<string> motion;
         FileManager fileManager;
         ContentManager content;
         Texture2D tileSheet;
@@ -43,7 +43,6 @@ namespace GamePlatform2D
         {
             tiles = new List<List<Tile>>();
             motion = new List<string>();
-            solid = new List<string>();
 
             fileManager = new FileManager();
             content = new ContentManager(ScreenManager.Instance.Content.ServiceProvider, "Content");
@@ -60,10 +59,6 @@ namespace GamePlatform2D
                     {
                         case "TileSet":
                             tileSheet = content.Load<Texture2D>("TileSets/" + fileManager.Contents[i][j]);
-                            break;
-
-                        case "Solid":
-                            solid.Add(fileManager.Contents[i][j]);
                             break;
 
                         case "TileDimensions":
@@ -99,23 +94,12 @@ namespace GamePlatform2D
 
                                 tempTiles.Add(new Tile());
 
-                                if (solid.Contains(fileManager.Contents[i][col]))
-                                    tempState = Tile.State.Solid;
-                                else
-                                    tempState = Tile.State.Empty;
-
-                                // pętla dla ruchomych klocków
-                                foreach (string m in motion)
-                                {
-                                    string[] getMotion = m.Split(':');
-
-                                    if (getMotion[0] == fileManager.Contents[i][col])
-                                    {
-                                        tempMotion = (Tile.Motion)Enum.Parse(typeof(Tile.Motion), getMotion[1]);
-                                    }
-                                }
                                 if (fileManager.Contents[i][col] != nullTile)
-                                    tempTiles[col].SetTile(tempState,tempMotion,new Vector2(col * 32, indexY * 32),tileSheet,new Rectangle(int.Parse(split[0]) * 32,int.Parse(split[1]) * 32,32,32));
+                                    tempState = Tile.State.Solid;
+                                else tempState = Tile.State.Empty;
+
+                                if (tempState != Tile.State.Empty)
+                                    tempTiles[col].SetTile(tempState, tempMotion, new Vector2(col * 32, indexY * 32), tileSheet, new Rectangle(int.Parse(split[0]) * 32, int.Parse(split[1]) * 32, 32, 32));
                                 else tempTiles[col].SetTile(tempState, tempMotion, new Vector2(col * 32, indexY * 32), tileSheet, new Rectangle(0 * 32, 0 * 32, 32, 32));
 
                             }

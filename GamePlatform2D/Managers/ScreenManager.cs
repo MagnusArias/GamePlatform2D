@@ -14,6 +14,7 @@ namespace GamePlatform2D
         ContentManager content;
         GameScreen currentScreen;
         GameScreen newScreen;
+        GraphicsDevice gd;
        
       
         Stack<GameScreen> screenStack = new Stack<GameScreen>();
@@ -36,6 +37,11 @@ namespace GamePlatform2D
             }
         }
 
+        public GraphicsDevice GraphicsDevice
+        {
+            get { return gd; }
+            set { gd = value; }
+        }
         public Vector2 Scale
         {
             get { return scale; }
