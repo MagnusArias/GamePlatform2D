@@ -54,7 +54,6 @@ namespace GamePlatform2D
             for (int i = 0; i < player.Entities.Count; i++)
             {
                 e = player.Entities[i];
-                //map.UpdateCollision(ref e);
                 player.Entities[i] = e;
             }
 
@@ -70,7 +69,6 @@ namespace GamePlatform2D
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
             map.Draw(spriteBatch);
             player.Draw(spriteBatch);
             //enemies.Draw(spriteBatch);
@@ -78,9 +76,7 @@ namespace GamePlatform2D
 
         public override void HandleInput()
         {
-            base.HandleInput();
-
-            if (!blockInput)
+           if (!blockInput)
             {
                 player.Entities[0].SetJumping(Keys.Up);
                 player.Entities[0].SetLeft(Keys.Left);

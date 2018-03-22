@@ -39,10 +39,6 @@ namespace GamePlatform2D
         layer.Update(gameTime);
     }
 
-    public void UpdateCollision(ref Entity e)
-    {
-        layer.UpdateCollision(ref e);
-    }
 
     public void Draw(SpriteBatch spriteBatch)
     {

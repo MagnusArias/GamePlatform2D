@@ -48,7 +48,6 @@ namespace GamePlatform2D
                 {
                     string line = reader.ReadLine();
 
-
                     if (identifier == String.Empty)
                         identifierFound = true;
                     else if (line.Contains("EndLoad=") && line.Contains(identifier))

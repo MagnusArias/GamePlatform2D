@@ -148,6 +148,8 @@ namespace GamePlatform2D
             ssAnimation = new SpriteSheetAnimation();
             spriteFont = this.content.Load<SpriteFont>("Font1");
             inputManager = input;
+            collisionBox = Vector2.Zero;
+
             layer = new Layer();
 
             for (int i = 0; i < attributes.Count; i++)
@@ -205,10 +207,10 @@ namespace GamePlatform2D
 
         public void CalculateCorners(Vector2 pos)
         {
-            int leftTile = (int)((pos.X - collisionBox.X / 2) / Layer.TileDimensions.X);
-            int rightTile = (int)((pos.X + collisionBox.X / 2 - 1) / Layer.TileDimensions.X);
-            int topTile = (int)((pos.Y - collisionBox.Y / 2) / Layer.TileDimensions.Y);
-            int bottomTile = (int)((pos.Y + collisionBox.Y / 2 - 1) / Layer.TileDimensions.Y);
+            int leftTile = (int)((pos.X - collisionBox.X / 2) / layer.TileSize.X);
+            int rightTile = (int)((pos.X + collisionBox.X / 2 - 1) / layer.TileSize.X);
+            int topTile = (int)((pos.Y - collisionBox.Y / 2) / layer.TileSize.Y);
+            int bottomTile = (int)((pos.Y + collisionBox.Y / 2 - 1) / layer.TileSize.Y);
 
             if (topTile < 0 || bottomTile >= layer.NumRows || 
                 leftTile < 0 || rightTile >= layer.NumCols)
@@ -229,8 +231,8 @@ namespace GamePlatform2D
 
         public virtual void CheckMapCollision()
         {
-            currCol = (int)(position.X / Layer.TileDimensions.X);
-            currRow = (int)(position.Y / Layer.TileDimensions.Y);
+            currCol = (int)(position.X / layer.TileSize.X);
+            currRow = (int)(position.Y / layer.TileSize.Y);
 
             dest = position + velocity;
             temp = position;
@@ -242,7 +244,7 @@ namespace GamePlatform2D
                 if (topLeft || topRight)
                 {
                     velocity.Y = 0;
-                    temp.Y = currRow * Layer.TileDimensions.Y + collisionBox.Y / 2;
+                    temp.Y = currRow * layer.TileSize.Y + collisionBox.Y / 2;
                 }
                 else temp.Y += velocity.Y;
             }
@@ -252,7 +254,7 @@ namespace GamePlatform2D
                 {
                     velocity.Y = 0;
                     state.falling = false;
-                    temp.Y = (currRow + 1) * Layer.TileDimensions.Y - collisionBox.Y / 2;
+                    temp.Y = (currRow + 1) * layer.TileSize.Y - collisionBox.Y / 2;
                 }
                 else temp.Y += velocity.Y;
             }
@@ -264,7 +266,7 @@ namespace GamePlatform2D
                 if (topLeft || bottomLeft)
                 {
                     velocity.X = 0;
-                    temp.X = currCol * Layer.TileDimensions.X + collisionBox.X / 2;
+                    temp.X = currCol * layer.TileSize.X + collisionBox.X / 2;
                 }
                 else temp.X += velocity.X;
             }
@@ -273,7 +275,7 @@ namespace GamePlatform2D
                 if (topRight || bottomRight)
                 {
                     velocity.X = 0;
-                    temp.X = (currCol+1) * Layer.TileDimensions.X - collisionBox.X / 2;
+                    temp.X = (currCol + 1) * layer.TileSize.X - collisionBox.X / 2;
                 }
                 else temp.X += velocity.X;
             }

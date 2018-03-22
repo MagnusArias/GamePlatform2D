@@ -38,6 +38,8 @@ namespace GamePlatform2D
             localSpeeds.maxFall = 3.0f;
 
             alreadyDoubleJump = false;
+            collisionBox.X = moveAnimation.FrameWidth;
+            collisionBox.Y = moveAnimation.FrameHeight;
 
         }
 

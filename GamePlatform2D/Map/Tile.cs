@@ -12,10 +12,10 @@ namespace GamePlatform2D
 {
     public class Tile
     {
-        public enum State { Solid, Passive };
+        public enum State { Empty, Solid, Platform };
         public enum Motion { Static, Horizontal, Vertical };
 
-        State state;
+        private State state;
         Motion motion;
         Vector2 position, prevPosition, velocity;
         Texture2D tileImage;
@@ -28,12 +28,12 @@ namespace GamePlatform2D
 
         Animation animation;
 
-        public State GetState
+        public State States
         {
             get { return state; }
             set { state = value; }
         }
-        public Motion GetMotion
+        public Motion Motions
         {
             get { return motion; }
             set { motion = value; }
@@ -121,77 +121,6 @@ namespace GamePlatform2D
 
             position += velocity;
             animation.Position = position;
-        }
-
-        public void UpdateCollision(ref Entity e)
-        {
-            FloatRect rect = new FloatRect(position.X, position.Y, Layer.TileDimensions.X, Layer.TileDimensions.Y);
-
-            // Gdy stoimy na poruszającej się platformie
-            if (e.OnTile && containsEntity)
-            {
-                if (!e.SyncTilePosition)
-                {
-                    e.Position += velocity;
-                    e.SyncTilePosition = true;
-                }
-
-                if (e.Rect.Right < rect.Left || e.Rect.Left > rect.Right || e.Rect.Bottom != rect.Top)
-                {
-                    e.OnTile = false;
-                    containsEntity = false;
-                    e.GetStates.SetFalling(false);
-                    //e.ActivateGravity = true;
-                }
-            }
-
-            // Normalna kolizja
-            if (e.Rect.Intersects(rect) && state == State.Solid)
-            {
-                // preve to "postać"
-                // prevTile to mapa
-                FloatRect preve = new FloatRect(e.PrevPosition.X, e.PrevPosition.Y, e.Animation.FrameWidth, e.Animation.FrameHeight);
-                FloatRect prevTile = new FloatRect(prevPosition.X, prevPosition.Y, Layer.TileDimensions.X, Layer.TileDimensions.Y);
-
-                if (e.Velocity.Y > 0)
-                {
-                    if (e.Rect.Bottom >= rect.Top && preve.Bottom <= prevTile.Top)
-                    {
-                        // Gdy stoimy na klocku
-                        e.Position = new Vector2(e.Position.X, position.Y - e.Animation.FrameHeight);
-                        e.Velocity = new Vector2(e.Velocity.X, 0);
-                        e.GetStates.SetFalling(false);
-                        e.OnTile = true;
-                        containsEntity = true;
-                    }
-                    else e.Velocity = new Vector2(e.Velocity.X, 0.1f);
-                }
-                else if (e.Velocity.Y < 0)
-                {
-                    if (e.Rect.Top <= rect.Bottom && preve.Top >= prevTile.Bottom)
-                    {
-
-                        // top collision
-                        e.Position = new Vector2(e.Position.X, position.Y + Layer.TileDimensions.Y);
-                        e.Velocity = new Vector2(e.Velocity.X, 0);
-                        //e.GetStates.SetFalling(false);
-                    }
-                    else e.Velocity = new Vector2(e.Velocity.X, 0.1f);
-                }
-                
-                if (e.Rect.Right >= rect.Left && preve.Right <= prevTile.Left)
-                {
-                    e.Position = new Vector2(position.X - e.Animation.FrameWidth, e.Position.Y);
-                    e.Direction = (e.Direction == 1) ? e.Direction = 2 : e.Direction = 1;
-                }
-                else if (e.Rect.Left <= rect.Right && preve.Left >= prevTile.Right)
-                {
-                    e.Position = new Vector2(position.X + Layer.TileDimensions.X, e.Position.Y);
-                    e.Direction = (e.Direction == 1) ? e.Direction = 2 : e.Direction = 1;
-
-                }
-            }
-            e.Animation.Position = e.Position;
         }
 
         public void Draw(SpriteBatch spriteBatch)

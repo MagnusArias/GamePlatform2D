@@ -12,34 +12,36 @@ namespace GamePlatform2D
 {
     public class Layer
     {
-        List<Tile> tiles;
+        List<List<Tile>> tiles;     // tutaj przechowywana jest mapa
         List<string> motion, solid;
         FileManager fileManager;
         ContentManager content;
         Texture2D tileSheet;
         string nullTile;
+        Vector2 tileDimension, mapDimensions;
 
         int numCols, numRows; // potrzebne do kolizji
 
-        public static Vector2 TileDimensions
+        public Vector2 TileSize
         {
-            get { return new Vector2(32, 32); }
+            get { return tileDimension; }
         }
-
+        public Vector2 MapDimensions
+        {
+            get { return mapDimensions; }
+        }
         public int NumCols
         {
             get { return numCols; }
         }
-
         public int NumRows
         {
             get { return numRows; }
         }
 
-
         public void LoadContent(Map map, string layerID)
         {
-            tiles = new List<Tile>();
+            tiles = new List<List<Tile>>();
             motion = new List<string>();
             solid = new List<string>();
 
@@ -64,6 +66,12 @@ namespace GamePlatform2D
                             solid.Add(fileManager.Contents[i][j]);
                             break;
 
+                        case "TileDimensions":
+                            string[] tileDim = fileManager.Contents[i][j].Split(',');
+                            tileDimension.X = int.Parse(tileDim[0]);
+                            tileDimension.Y = int.Parse(tileDim[1]);
+                            break;
+
                         case "NullTile":
                             nullTile = fileManager.Contents[i][j];
                             break;
@@ -79,36 +87,39 @@ namespace GamePlatform2D
                             break;
 
                         case "StartLayer":
-
                             Tile.Motion tempMotion = Tile.Motion.Static;
                             Tile.State tempState;
+                            List<Tile> tempTiles = new List<Tile>();
 
-                            for (int k = 0; k < fileManager.Contents[i].Count; k++)
+                            //wczytanie jednej linii
+                            for (int col = 0; col < fileManager.Contents[i].Count; col++)
                             {
-                                if (fileManager.Contents[i][k] != nullTile)
+                                // sprawdzanie pojeydnczeog symbolu
+                                string[] split = fileManager.Contents[i][col].Split(',');
+
+                                tempTiles.Add(new Tile());
+
+                                if (solid.Contains(fileManager.Contents[i][col]))
+                                    tempState = Tile.State.Solid;
+                                else
+                                    tempState = Tile.State.Empty;
+
+                                // pętla dla ruchomych klocków
+                                foreach (string m in motion)
                                 {
-                                    string[] split = fileManager.Contents[i][k].Split(',');
-                                    tiles.Add(new Tile());
+                                    string[] getMotion = m.Split(':');
 
-                                    if (solid.Contains(fileManager.Contents[i][k]))
-                                        tempState = Tile.State.Solid;
-                                    else
-                                        tempState = Tile.State.Passive;
-
-                                    foreach (string m in motion)
+                                    if (getMotion[0] == fileManager.Contents[i][col])
                                     {
-                                        string[] getMotion = m.Split(':');
-
-                                        if (getMotion[0] == fileManager.Contents[i][k])
-                                        {
-                                            tempMotion = (Tile.Motion)Enum.Parse(typeof(Tile.Motion), getMotion[1]);
-                                        }
+                                        tempMotion = (Tile.Motion)Enum.Parse(typeof(Tile.Motion), getMotion[1]);
                                     }
-
-                                    tiles[tiles.Count - 1].SetTile(tempState, tempMotion, new Vector2(k * 32, indexY * 32), tileSheet,
-                                        new Rectangle(int.Parse(split[0]) * 32, int.Parse(split[1]) * 32, 32, 32));
                                 }
+                                if (fileManager.Contents[i][col] != nullTile)
+                                    tempTiles[col].SetTile(tempState,tempMotion,new Vector2(col * 32, indexY * 32),tileSheet,new Rectangle(int.Parse(split[0]) * 32,int.Parse(split[1]) * 32,32,32));
+                                else tempTiles[col].SetTile(tempState, tempMotion, new Vector2(col * 32, indexY * 32), tileSheet, new Rectangle(0 * 32, 0 * 32, 32, 32));
+
                             }
+                            tiles.Add(tempTiles);
                             indexY++;
                             break;
 
@@ -122,35 +133,22 @@ namespace GamePlatform2D
 
         public void Update(GameTime gameTime)
         {
-            for (int i = 0; i < tiles.Count; i++)
-            {
-                tiles[i].Update(gameTime);
-            }
+            for (int row = 0; row < tiles.Count; row++)
+                for (int col = 0; col < tiles[row].Count; col++)
+                    tiles[row][col].Update(gameTime);
         }
 
         public Tile.State GetTileType(Vector2 pos)
         {
-            foreach (Tile t in tiles)
-            {
-                if (t.Position == pos)
-                    return t.GetState;
-            }
-            return Tile.State.Passive;
+            return tiles[(int)pos.X][(int)pos.Y].States;
         }
 
-        public void UpdateCollision(ref Entity e)
-        {
-            for (int i = 0; i < tiles.Count; i++)
-            {
-                tiles[i].UpdateCollision(ref e);
-            }
-        }
         public void Draw(SpriteBatch spriteBatch)
         {
-            for (int i = 0; i < tiles.Count; i++)
-            {
-                tiles[i].Draw(spriteBatch);
-            }
+            for (int row = 0; row < tiles.Count; row++)
+                for (int col = 0; col < tiles[row].Count; col++)
+                    tiles[row][col].Draw(spriteBatch);
+
         }
     }
 }
