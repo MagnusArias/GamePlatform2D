@@ -9,8 +9,9 @@ namespace GamePlatform2D
     public class GameplayScreen : GameScreen
     {
         #region Variables
-        EntityManager player, enemies;
+        EntityManager player;//, enemies;
         Map map;
+        bool blockInput;
         #endregion
 
         #region Properties
@@ -21,46 +22,50 @@ namespace GamePlatform2D
         public override void LoadContent(ContentManager content, InputManager input)
         {
             base.LoadContent(content, input);
+            blockInput = false;
             player = new EntityManager();
-            enemies = new EntityManager();
+            //enemies = new EntityManager();
             map = new Map();
-            player.LoadContent("Player", content, "Load/Entity/Player.ma", "", input);
-            enemies.LoadContent("Enemy", content, "Load/Entity/Enemy.ma", "Level1", input);
+
+            //enemies.LoadContent("Enemy", content, "Load/Entity/Enemy.ma", "Level1", input);
             map.LoadContent(content, map, "Map1");
+            player.LoadContent("Player", content, "Load/Entity/Player.ma", "", input, map.layer);
         }
 
         public override void UnloadContent()
         {
             base.UnloadContent();
             player.UnloadContent();
-            enemies.UnloadContent();
+            //enemies.UnloadContent();
             map.UnloadContent();
         }
 
         public override void Update(GameTime gameTime)
         {
             inputManager.Update();
-            player.Update(gameTime, map);
-            enemies.Update(gameTime, map);
+            HandleInput();
             map.Update(gameTime);
+            player.Update(gameTime, map);
+            //enemies.Update(gameTime, map);
+
 
             Entity e;
 
             for (int i = 0; i < player.Entities.Count; i++)
             {
                 e = player.Entities[i];
-                map.UpdateCollision(ref e);
+                //map.UpdateCollision(ref e);
                 player.Entities[i] = e;
             }
 
-            for (int i = 0; i < enemies.Entities.Count; i++)
+            /*for (int i = 0; i < enemies.Entities.Count; i++)
             {
                 e = enemies.Entities[i];
                 map.UpdateCollision(ref e);
                 enemies.Entities[i] = e;
-            }
+            }*/
 
-            player.EntityColision(enemies);
+            //player.EntityColision(enemies);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -68,7 +73,20 @@ namespace GamePlatform2D
             base.Draw(spriteBatch);
             map.Draw(spriteBatch);
             player.Draw(spriteBatch);
-            enemies.Draw(spriteBatch);
+            //enemies.Draw(spriteBatch);
+        }
+
+        public override void HandleInput()
+        {
+            base.HandleInput();
+
+            if (!blockInput)
+            {
+                player.Entities[0].SetJumping(Keys.Up);
+                player.Entities[0].SetLeft(Keys.Left);
+                player.Entities[0].SetRight(Keys.Right);
+                player.Entities[0].SetDown(Keys.Down);
+            }
         }
         #endregion
 

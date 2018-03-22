@@ -19,10 +19,23 @@ namespace GamePlatform2D
         Texture2D tileSheet;
         string nullTile;
 
+        int numCols, numRows; // potrzebne do kolizji
+
         public static Vector2 TileDimensions
         {
             get { return new Vector2(32, 32); }
         }
+
+        public int NumCols
+        {
+            get { return numCols; }
+        }
+
+        public int NumRows
+        {
+            get { return numRows; }
+        }
+
 
         public void LoadContent(Map map, string layerID)
         {
@@ -53,6 +66,12 @@ namespace GamePlatform2D
 
                         case "NullTile":
                             nullTile = fileManager.Contents[i][j];
+                            break;
+
+                        case "MapSize":
+                            string[] mapSize = fileManager.Contents[i][j].Split(',');
+                            numRows = int.Parse(mapSize[1]);
+                            numCols = int.Parse(mapSize[0]);
                             break;
 
                         case "Motion":
@@ -107,6 +126,16 @@ namespace GamePlatform2D
             {
                 tiles[i].Update(gameTime);
             }
+        }
+
+        public Tile.State GetTileType(Vector2 pos)
+        {
+            foreach (Tile t in tiles)
+            {
+                if (t.Position == pos)
+                    return t.GetState;
+            }
+            return Tile.State.Passive;
         }
 
         public void UpdateCollision(ref Entity e)

@@ -28,6 +28,35 @@ namespace GamePlatform2D
 
         Animation animation;
 
+        public State GetState
+        {
+            get { return state; }
+            set { state = value; }
+        }
+        public Motion GetMotion
+        {
+            get { return motion; }
+            set { motion = value; }
+        }
+
+        public Vector2 PrevPosition
+        {
+            get { return prevPosition; }
+            set { position = value; }
+        }
+
+        public Vector2 Position
+        {
+            get { return position; }
+            set { position = value; }
+        }
+
+        public bool ContainsEntity
+        {
+            get { return containsEntity; }
+            set { containsEntity = value; }
+        }
+
         private Texture2D CropImage(Texture2D tileSheet, Rectangle tileArea)
         {
             Texture2D croppedImage = new Texture2D(tileSheet.GraphicsDevice, tileArea.Width, tileArea.Height);
@@ -98,6 +127,7 @@ namespace GamePlatform2D
         {
             FloatRect rect = new FloatRect(position.X, position.Y, Layer.TileDimensions.X, Layer.TileDimensions.Y);
 
+            // Gdy stoimy na poruszającej się platformie
             if (e.OnTile && containsEntity)
             {
                 if (!e.SyncTilePosition)
@@ -110,31 +140,46 @@ namespace GamePlatform2D
                 {
                     e.OnTile = false;
                     containsEntity = false;
+                    e.GetStates.SetFalling(false);
                     //e.ActivateGravity = true;
                 }
             }
 
+            // Normalna kolizja
             if (e.Rect.Intersects(rect) && state == State.Solid)
             {
+                // preve to "postać"
+                // prevTile to mapa
                 FloatRect preve = new FloatRect(e.PrevPosition.X, e.PrevPosition.Y, e.Animation.FrameWidth, e.Animation.FrameHeight);
                 FloatRect prevTile = new FloatRect(prevPosition.X, prevPosition.Y, Layer.TileDimensions.X, Layer.TileDimensions.Y);
 
-                if (e.Rect.Bottom >= rect.Top && preve.Bottom <= prevTile.Top)
+                if (e.Velocity.Y > 0)
                 {
-                    // bottom collision
-                    e.Position = new Vector2(e.Position.X, position.Y - e.Animation.FrameHeight);
-                    //e.ActivateGravity = false;
-                    e.OnTile = true;
-                    containsEntity = true;
+                    if (e.Rect.Bottom >= rect.Top && preve.Bottom <= prevTile.Top)
+                    {
+                        // Gdy stoimy na klocku
+                        e.Position = new Vector2(e.Position.X, position.Y - e.Animation.FrameHeight);
+                        e.Velocity = new Vector2(e.Velocity.X, 0);
+                        e.GetStates.SetFalling(false);
+                        e.OnTile = true;
+                        containsEntity = true;
+                    }
+                    else e.Velocity = new Vector2(e.Velocity.X, 0.1f);
                 }
-                else if (e.Rect.Top <= rect.Bottom && preve.Top >= prevTile.Bottom)
+                else if (e.Velocity.Y < 0)
                 {
-                    // top collision
-                    e.Position = new Vector2(e.Position.X, position.Y + Layer.TileDimensions.Y);
-                    e.Velocity = new Vector2(e.Velocity.X, 0);
-                    //e.ActivateGravity = true;
+                    if (e.Rect.Top <= rect.Bottom && preve.Top >= prevTile.Bottom)
+                    {
+
+                        // top collision
+                        e.Position = new Vector2(e.Position.X, position.Y + Layer.TileDimensions.Y);
+                        e.Velocity = new Vector2(e.Velocity.X, 0);
+                        //e.GetStates.SetFalling(false);
+                    }
+                    else e.Velocity = new Vector2(e.Velocity.X, 0.1f);
                 }
-                else if (e.Rect.Right >= rect.Left && preve.Right <= prevTile.Left)
+                
+                if (e.Rect.Right >= rect.Left && preve.Right <= prevTile.Left)
                 {
                     e.Position = new Vector2(position.X - e.Animation.FrameWidth, e.Position.Y);
                     e.Direction = (e.Direction == 1) ? e.Direction = 2 : e.Direction = 1;

@@ -16,14 +16,14 @@ namespace GamePlatform2D
         FileManager fileManager;
         InputManager input;
 
-
         public List<Entity> Entities { get => entities; set => entities = value; }
 
-        public void LoadContent(string entityType, ContentManager content, string filename, string identifier, InputManager input)
+        public void LoadContent(string entityType, ContentManager content, string filename, string identifier, InputManager input, Layer lyr)
         {
             entities = new List<Entity>();
             fileManager = new FileManager();
             this.input = input;
+
 
             if (identifier == String.Empty)
                 fileManager.LoadContent(filename, "");
@@ -34,7 +34,7 @@ namespace GamePlatform2D
             {
                 Type newClass = Type.GetType("GamePlatform2D." + entityType);
                 entities.Add((Entity)Activator.CreateInstance(newClass));
-                entities[i].LoadContent(content, fileManager.Attributes[i], fileManager.Contents[i], this.input);
+                entities[i].LoadContent(content, fileManager.Attributes[i], fileManager.Contents[i], this.input, lyr);
             }
         }
 
@@ -69,6 +69,7 @@ namespace GamePlatform2D
             for (int i = 0; i < entities.Count; i++)
                 entities[i].Draw(spriteBatch);
         }
+
     }
 
 }

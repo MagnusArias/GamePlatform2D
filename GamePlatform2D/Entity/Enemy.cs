@@ -12,14 +12,16 @@ namespace GamePlatform2D
 {
     public class Enemy : Entity
     {
-        public override void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input)
+       
+
+        public override void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input, Layer l)
         {
-            base.LoadContent(content, attributes, contents, input);
+            base.LoadContent(content, attributes, contents, input, l);
             direction = 1;
 
             origPosition = position;
-            if (direction == 1) destPosition.X = origPosition.X + range;
-            else destPosition.X = origPosition.X - range;
+            if (direction == 1) dest.X = origPosition.X + range;
+            else dest.X = origPosition.X - range;
         }
 
 
@@ -35,12 +37,12 @@ namespace GamePlatform2D
 
             if (direction == 1)
             {
-                velocity.X = moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                velocity.X = speed.move * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 2);
             }
             else if (direction == 2)
             {
-                velocity.X = -moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                velocity.X = -speed.move * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 moveAnimation.CurrentFrame = new Vector2(moveAnimation.CurrentFrame.X, 1);
             }
             else
@@ -55,7 +57,7 @@ namespace GamePlatform2D
 
             position += velocity;
 
-            if (direction == 1 && position.X >= destPosition.X)
+            /*if (direction == 1 && position.X >= destPosition.X)
             {
                 direction = 2;
                 destPosition.X = origPosition.X - range;
@@ -64,7 +66,7 @@ namespace GamePlatform2D
             {
                 direction = 1;
                 destPosition.X = origPosition.X + range;
-            }
+            }*/
 
             moveAnimation.Position = position;
             ssAnimation.Update(gameTime, ref moveAnimation);

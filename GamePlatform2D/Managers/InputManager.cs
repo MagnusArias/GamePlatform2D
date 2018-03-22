@@ -5,7 +5,8 @@ namespace GamePlatform2D
     public class InputManager
     {
         #region Variables
-        KeyboardState prevKeyState, keyState;
+        KeyboardState prevKeyState;
+        KeyboardState keyState;
         #endregion
 
         #region Properties
@@ -26,6 +27,7 @@ namespace GamePlatform2D
         public void Update()
         {
             prevKeyState = keyState;
+
             keyState = Keyboard.GetState();
         }
 

@@ -14,6 +14,9 @@ Load=[Solid]
 [2,0]
 [1,0]
 
+Load=[MapSize]
+[34,22]
+
 Load=[NullTile]
 [---]
 

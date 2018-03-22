@@ -27,6 +27,11 @@ namespace GamePlatform2D
             this.inputManager = inputManager;
         }
 
+        public virtual void HandleInput()
+        {
+
+        }
+
         public virtual void UnloadContent()
         {
             content.Unload();
