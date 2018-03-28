@@ -121,7 +121,9 @@ namespace GamePlatform2D
                 state.flinching =
                 state.dashing =
                 state.squat =
-                state.highAttack = state.lowAttack = state.normalAttack = false;
+                state.highAttack = 
+                state.lowAttack = 
+                state.normalAttack = false;
         }
 
         public override void OnCollision(Entity e)
