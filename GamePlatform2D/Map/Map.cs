@@ -6,14 +6,14 @@ namespace GamePlatform2D
 {
     public class Map
     {
-        public Layer layer;
+        public TileMap layer;
         string id;
 
         public string ID { get => id; }
 
         public void LoadContent(ContentManager content, Map map, string mapID)
         {
-            layer = new Layer();
+            layer = new TileMap();
             id = mapID;
 
             layer.LoadContent(map, "Layer1");

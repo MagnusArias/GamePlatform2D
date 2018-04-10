@@ -50,7 +50,7 @@
     <Compile Include="Managers\HudManager.cs" />
     <Compile Include="Managers\EntityManager.cs" />
     <Compile Include="Entity\FloatRect.cs" />
-    <Compile Include="Map\Layer.cs" />
+    <Compile Include="Map\TileMap.cs" />
     <Compile Include="Entity\Enemy.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Animation\FadeAnimation.cs" />

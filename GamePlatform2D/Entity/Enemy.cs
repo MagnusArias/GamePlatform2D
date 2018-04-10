@@ -8,7 +8,7 @@ namespace GamePlatform2D
 {
     public class Enemy : Entity
     {
-        public override void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input, Layer l)
+        public override void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input, TileMap l)
         {
             base.LoadContent(content, attributes, contents, input, l);
             direction = Directions.Right;
@@ -24,7 +24,7 @@ namespace GamePlatform2D
             moveAnimation.UnloadContent();
         }
 
-        public override void Update(GameTime gameTime, InputManager input, Layer layer)
+        public override void Update(GameTime gameTime, InputManager input, TileMap layer)
         {
             base.Update(gameTime, input, layer);
 

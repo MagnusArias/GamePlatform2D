@@ -11,7 +11,7 @@ namespace GamePlatform2D
         #region Variables
         public enum Directions { Left, Right };
 
-        protected Layer layer;
+        protected TileMap tileMap;
         protected FileManager fileManager;
         protected int health, range;
         protected Directions direction;
@@ -135,7 +135,7 @@ namespace GamePlatform2D
         #endregion
 
         #region Public Methods
-        public virtual void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input, Layer lyr)
+        public virtual void LoadContent(ContentManager content, List<string> attributes, List<string> contents, InputManager input, TileMap lyr)
         {
             this.content = new ContentManager(content.ServiceProvider, "Content");
             moveAnimation = new Animation();
@@ -144,7 +144,7 @@ namespace GamePlatform2D
             inputManager = input;
             collisionBox = Vector2.Zero;
 
-            layer = new Layer();
+            tileMap = new TileMap();
 
             for (int i = 0; i < attributes.Count; i++)
             {
@@ -181,7 +181,7 @@ namespace GamePlatform2D
             velocity = Vector2.Zero;
             syncTilePosition = false;
 
-            layer = lyr;
+            tileMap = lyr;
             moveAnimation.LoadContent(content, image, "", position);
         }
 
@@ -197,22 +197,22 @@ namespace GamePlatform2D
 
         public void CalculateCorners(float x, float y)
         {
-            float leftTile = (x - collisionBox.X / 2) / layer.TileSize.X;
-            float rightTile = (x + collisionBox.X / 2 - 1) / layer.TileSize.X;
-            float topTile = (y - collisionBox.Y / 2) / layer.TileSize.Y;
-            float bottomTile = (y + collisionBox.Y / 2- 1) / layer.TileSize.Y;
+            float leftTile = (x - collisionBox.X / 2) / tileMap.TileSize.X;
+            float rightTile = (x + collisionBox.X / 2 - 1) / tileMap.TileSize.X;
+            float topTile = (y - collisionBox.Y / 2) / tileMap.TileSize.Y;
+            float bottomTile = (y + collisionBox.Y / 2- 1) / tileMap.TileSize.Y;
 
-            if (topTile < 0 || bottomTile >= layer.NumRows ||
-                leftTile < 0 || rightTile >= layer.NumCols)
+            if (topTile < 0 || bottomTile >= tileMap.NumRows ||
+                leftTile < 0 || rightTile >= tileMap.NumCols)
             {
                 topLeft = topRight = bottomLeft = bottomRight = false;
                 return;
             }
 
-            Tile.State tl = layer.GetTileType(new Vector2(topTile, leftTile));
-            Tile.State tr = layer.GetTileType(new Vector2(topTile, rightTile));
-            Tile.State bl = layer.GetTileType(new Vector2(bottomTile, leftTile));
-            Tile.State br = layer.GetTileType(new Vector2(bottomTile, rightTile));
+            Tile.State tl = tileMap.GetTileType(new Vector2(topTile, leftTile));
+            Tile.State tr = tileMap.GetTileType(new Vector2(topTile, rightTile));
+            Tile.State bl = tileMap.GetTileType(new Vector2(bottomTile, leftTile));
+            Tile.State br = tileMap.GetTileType(new Vector2(bottomTile, rightTile));
             topLeft = tl == Tile.State.Solid;
             topRight = tr == Tile.State.Solid;
             bottomLeft = bl == Tile.State.Solid;
@@ -221,8 +221,8 @@ namespace GamePlatform2D
 
         public virtual void CheckMapCollision()
         {
-            currCol = (int)(position.X / layer.TileSize.X);
-            currRow = (int)(position.Y / layer.TileSize.Y);
+            currCol = (int)(position.X / tileMap.TileSize.X);
+            currRow = (int)(position.Y / tileMap.TileSize.Y);
 
             dest = position + velocity;
             temp = position;
@@ -234,7 +234,7 @@ namespace GamePlatform2D
                 if (topLeft || topRight)
                 {
                     velocity.Y = 0;
-                    temp.Y = currRow * layer.TileSize.Y + collisionBox.Y / 2;
+                    temp.Y = currRow * tileMap.TileSize.Y + collisionBox.Y / 2;
                 }
                 else temp.Y += velocity.Y;
             }
@@ -244,7 +244,7 @@ namespace GamePlatform2D
                 {
                     velocity.Y = 0;
                     state.falling = false;
-                    temp.Y = (currRow + 1) * layer.TileSize.Y - collisionBox.Y / 2;
+                    temp.Y = (currRow + 1) * tileMap.TileSize.Y - collisionBox.Y / 2;
                 }
                 else temp.Y += velocity.Y;
             }
@@ -256,7 +256,7 @@ namespace GamePlatform2D
                 if (topLeft || bottomLeft)
                 {
                     velocity.X = 0;
-                    temp.X = currCol * layer.TileSize.X + collisionBox.X / 2;
+                    temp.X = currCol * tileMap.TileSize.X + collisionBox.X / 2;
                 }
                 else temp.X += velocity.X;
             }
@@ -265,7 +265,7 @@ namespace GamePlatform2D
                 if (topRight || bottomRight)
                 {
                     velocity.X = 0;
-                    temp.X = (currCol + 1) * layer.TileSize.X - collisionBox.X / 2;
+                    temp.X = (currCol + 1) * tileMap.TileSize.X - collisionBox.X / 2;
                 }
                 else temp.X += velocity.X;
             }
@@ -286,7 +286,7 @@ namespace GamePlatform2D
             position = pos;
         }
 
-        public virtual void Update(GameTime gameTime, InputManager input, Layer layer)
+        public virtual void Update(GameTime gameTime, InputManager input, TileMap layer)
         {
             syncTilePosition = false;
             moveAnimation.IsActive = true;

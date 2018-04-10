@@ -14,7 +14,7 @@ namespace GamePlatform2D
 
         public List<Entity> Entities { get => entities; set => entities = value; }
 
-        public void LoadContent(string entityType, ContentManager content, string filename, string identifier, InputManager input, Layer lyr)
+        public void LoadContent(string entityType, ContentManager content, string filename, string identifier, InputManager input, TileMap lyr)
         {
             entities = new List<Entity>();
             fileManager = new FileManager();
